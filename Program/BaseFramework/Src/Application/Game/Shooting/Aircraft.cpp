@@ -2,16 +2,6 @@
 #include "Missile.h"
 #include "../Scene.h"
 
-Aircraft::Aircraft()
-{
-
-}
-
-Aircraft::~Aircraft()
-{
-	Release();
-}
-
 void Aircraft::Deserialize()
 {
 	m_pModel = new KdModel();
@@ -41,17 +31,6 @@ void Aircraft::Update()
 	UpdateMove();
 
 	UpdateShoot();
-}
-
-void Aircraft::Draw()
-{
-	if (m_pModel == nullptr)
-	{
-		return;
-	}
-
-	SHADER.m_standardShader.SetWorldMatrix(m_mWorld);
-	SHADER.m_standardShader.DrawMesh(m_pModel->GetMesh(), m_pModel->GetMaterials());
 }
 
 void Aircraft::ImGuiUpdate()
@@ -180,7 +159,7 @@ void Aircraft::UpdateShoot()
 				pMissile->Deserialize();
 				pMissile->SetMatrix(m_mWorld);
 
-				Scene::GetInstance().AddMissile(pMissile);
+				Scene::GetInstance().AddObject(pMissile);
 			}
 
 			m_canShoot = false;
@@ -189,14 +168,5 @@ void Aircraft::UpdateShoot()
 	else
 	{
 		m_canShoot = true;
-	}
-}
-
-void Aircraft::Release()
-{
-	if (m_pModel)
-	{
-		delete m_pModel;
-		m_pModel = nullptr;
 	}
 }

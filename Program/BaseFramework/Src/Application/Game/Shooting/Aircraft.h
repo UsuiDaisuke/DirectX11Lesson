@@ -1,17 +1,14 @@
 ﻿#pragma once
+#include "../GameObject.h"
 
 class Missile;
 
-class Aircraft
+class Aircraft : public GameObject
 {
 public:
 
-	Aircraft();
-	~Aircraft();
-
 	void Deserialize();	// 初期化:オブジェクト精製用の外部データの解釈
 	void Update();		// 更新
-	void Draw();		// 描画
 
 	void ImGuiUpdate(); //Aircraftクラス専用のImGui更新
 
@@ -21,11 +18,6 @@ public:
 	void UpdateShoot();	//発射関数
 
 private:
-
-	void Release();
-
-	KdModel*		m_pModel = nullptr;		// 3Dモデルデータ
-	KdMatrix		m_mWorld;				// 飛行機のワールド行列
 
 	float			m_speed = 0.2f;			// 移動スピード
 
