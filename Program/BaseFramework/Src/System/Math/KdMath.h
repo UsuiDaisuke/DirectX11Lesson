@@ -139,6 +139,13 @@ public:
 		*this = DirectX::XMMatrixRotationZ(angle);
 	}
 
+	//透視影行列の作成
+	KdMatrix& CreateProjectionPerspectiveFov(float fovAngleY, float aspectRatio, float nearZ, float farZ)
+	{
+		*this = DirectX::XMMatrixPerspectiveFovLH(fovAngleY, aspectRatio, nearZ, farZ);
+		return *this;
+	}
+
 	/* ==========操作========== */
 
 	//X軸回転
