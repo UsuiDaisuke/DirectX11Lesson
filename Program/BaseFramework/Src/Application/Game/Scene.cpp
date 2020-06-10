@@ -18,48 +18,57 @@ Scene::~Scene()		//デストラクタ
 
 void Scene::Init()
 {
-	m_sky.Load("Data/Sky/Sky.gltf");
-
-	m_pCamera = new EditorCamera();
-
-	StageObject* pGround = new StageObject();
-
-	if (pGround)
+	m_spSky = std::make_shared<KdModel>();
+	if (m_spSky->Load("Data/Sky/Sky.gltf") == false)
 	{
-		pGround->Deserialize();
-		m_objects.push_back(pGround);
+		m_spSky.reset();
 	}
 
-	Aircraft* pAircraft = new Aircraft();
+	m_spCamera = std::make_shared<EditorCamera>();
 
-	if (pAircraft)
+	Deserialize();
+}
+
+void Scene::Deserialize()
+{
+	std::shared_ptr<StageObject> spGround = std::make_shared<StageObject>();
+
+	if (spGround)
 	{
-		pAircraft->Deserialize();
-		m_objects.push_back(pAircraft);
+		spGround->Deserialize();
+		m_objects.push_back(spGround);
+	}
+
+	std::shared_ptr<Aircraft> spAircraft = std::make_shared<Aircraft>();
+
+	if (spAircraft)
+	{
+		spAircraft->Deserialize();
+		m_objects.push_back(spAircraft);
 	}
 }
 
 void Scene::Release()
 {
-	if (m_pCamera)
+	if (m_spSky)
 	{
-		delete m_pCamera;
-		m_pCamera = nullptr;
+		m_spSky.reset();
+	}
+
+	if (m_spCamera)
+	{
+		m_spCamera.reset();
 	}
 	
-	for (auto pObjects : m_objects)
-	{
-		delete pObjects;
-	}
 	m_objects.clear();
 }
 
 void Scene::Update()
 {
 	if (m_editorCameraEnable) {
-		if (m_pCamera)
+		if (m_spCamera)
 		{
-			m_pCamera->Update();
+			m_spCamera->Update();
 		}
 	}
 
@@ -68,17 +77,16 @@ void Scene::Update()
 		pObjects->Update();
 	}
 
-	for (auto pObjectItr = m_objects.begin(); pObjectItr != m_objects.end();)
+	for (auto spObjectItr = m_objects.begin(); spObjectItr != m_objects.end();)
 	{
 		//寿命が尽きていたらリストから除外
-		if ((*pObjectItr)->IsAlive() == false)
+		if ((*spObjectItr)->IsAlive() == false)
 		{
-			delete (*pObjectItr);
-			pObjectItr = m_objects.erase(pObjectItr);
+			spObjectItr = m_objects.erase(spObjectItr);
 		}
 		else
 		{
-			++pObjectItr;
+			++spObjectItr;
 		}
 	}
 }
@@ -87,9 +95,9 @@ void Scene::Draw()
 {
 	// エディターカメラをシェーダーにセット
 	if (m_editorCameraEnable) {
-		if (m_pCamera)
+		if (m_spCamera)
 		{
-			m_pCamera->SetToShader();
+			m_spCamera->SetToShader();
 		}
 	}
 	else 
@@ -109,8 +117,9 @@ void Scene::Draw()
 	SHADER.m_effectShader.SetWorldMatrix(skyScale);
 
 	// モデルの描画(メッシュの情報とマテリアルの情報を渡す)
-	SHADER.m_effectShader.DrawMesh(m_sky.GetMesh(), m_sky.GetMaterials());
-
+	if (m_spSky) {
+		SHADER.m_effectShader.DrawMesh(m_spSky->GetMesh().get(), m_spSky->GetMaterials());
+	}
 
 	//不透明物描画
 	SHADER.m_standardShader.SetToDevice();
@@ -149,7 +158,7 @@ void Scene::Draw()
 	}
 }
 
-void Scene::AddObject(GameObject* pObject)
+void Scene::AddObject(std::shared_ptr<GameObject> pObject)
 {
 	if (pObject == nullptr)
 	{

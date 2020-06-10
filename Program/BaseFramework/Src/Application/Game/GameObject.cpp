@@ -22,20 +22,19 @@ void GameObject::Update()
 
 void GameObject::Draw()
 {
-	if (m_pModel == nullptr)
+	if (m_spModel == nullptr)
 	{
 		return;
 	}
 
 	SHADER.m_standardShader.SetWorldMatrix(m_mWorld);
-	SHADER.m_standardShader.DrawMesh(m_pModel->GetMesh(), m_pModel->GetMaterials());
+	SHADER.m_standardShader.DrawMesh(m_spModel->GetMesh().get(), m_spModel->GetMaterials());
 }
 
 void GameObject::Release()
 {
-	if (m_pModel)
+	if (m_spModel)
 	{
-		delete m_pModel;
-		m_pModel = nullptr;
+		m_spModel.reset();
 	}
 }

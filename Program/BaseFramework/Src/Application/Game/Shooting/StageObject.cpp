@@ -2,16 +2,15 @@
 
 void StageObject::Deserialize()
 {
-	m_pModel = new KdModel();
+	m_spModel = std::make_shared<KdModel>();
 
-	if (m_pModel == nullptr)
+	if (m_spModel == nullptr)
 	{
 		return;
 	}
 
-	if (m_pModel->Load("Data/StageMap/StageMap.gltf") == false)
+	if (m_spModel->Load("Data/StageMap/StageMap.gltf") == false)
 	{
-		delete m_pModel;
-		m_pModel = nullptr;
+		m_spModel.reset();
 	}
 }

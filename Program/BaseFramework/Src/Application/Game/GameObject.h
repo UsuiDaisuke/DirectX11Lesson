@@ -28,7 +28,7 @@ protected:
 
 	virtual void Release();
 
-	KdModel* m_pModel = nullptr;
+	std::shared_ptr<KdModel> m_spModel = nullptr;
 	KdMatrix m_mWorld;
 
 	bool m_alive = true;

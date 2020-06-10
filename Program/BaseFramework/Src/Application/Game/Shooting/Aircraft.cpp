@@ -4,16 +4,15 @@
 
 void Aircraft::Deserialize()
 {
-	m_pModel = new KdModel();
-	if (m_pModel == nullptr)
+	m_spModel = std::make_shared<KdModel>();
+	if (m_spModel == nullptr)
 	{
 		return;
 	}
 
-	if (m_pModel->Load("Data/Aircraft/Aircraft_body.gltf") == false)
+	if (m_spModel->Load("Data/Aircraft/Aircraft_body.gltf") == false)
 	{
-		delete m_pModel;
-		m_pModel = nullptr;
+		m_spModel = nullptr;
 	}
 
 	// 初期配置座標を地面から少し浮いた位置にする
@@ -153,13 +152,13 @@ void Aircraft::UpdateShoot()
 	{
 		if (m_canShoot)
 		{
-			Missile* pMissile = new Missile();
-			if (pMissile)
+			std::shared_ptr<Missile> spMissile = std::make_shared<Missile>();
+			if (spMissile)
 			{
-				pMissile->Deserialize();
-				pMissile->SetMatrix(m_mWorld);
+				spMissile->Deserialize();
+				spMissile->SetMatrix(m_mWorld);
 
-				Scene::GetInstance().AddObject(pMissile);
+				Scene::GetInstance().AddObject(spMissile);
 			}
 
 			m_canShoot = false;
