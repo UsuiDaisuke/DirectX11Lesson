@@ -4,16 +4,7 @@
 
 void Missile::Deserialize()
 {
-	m_spModel = std::make_shared<KdModel>();
-	if (m_spModel == nullptr)
-	{
-		return;
-	}
-
-	if (m_spModel->Load("Data/Missile/Missile.gltf") == false)
-	{
-		Release();
-	}
+	m_spModel = KdResourceFactory::GetInstance().GetModel("Data/Missile/Missile.gltf");
 
 	m_lifeSpan = APP.m_maxFps * 10;
 }

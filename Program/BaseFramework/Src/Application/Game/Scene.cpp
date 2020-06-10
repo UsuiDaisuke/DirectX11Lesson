@@ -18,11 +18,7 @@ Scene::~Scene()		//デストラクタ
 
 void Scene::Init()
 {
-	m_spSky = std::make_shared<KdModel>();
-	if (m_spSky->Load("Data/Sky/Sky.gltf") == false)
-	{
-		m_spSky.reset();
-	}
+	m_spSky = KdResourceFactory::GetInstance().GetModel("Data/Sky/Sky.gltf");
 
 	m_spCamera = std::make_shared<EditorCamera>();
 

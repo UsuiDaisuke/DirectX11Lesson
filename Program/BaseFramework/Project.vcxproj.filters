@@ -49,6 +49,9 @@
     <Filter Include="Library\imgui">
       <UniqueIdentifier>{f951b6fd-c006-4e7c-aafe-b5b55b375be7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Application\Component">
+      <UniqueIdentifier>{c1f980b0-d28c-46b5-b2bd-7ddcaa71d81d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Pch.h">
@@ -162,6 +165,12 @@
     <ClInclude Include="Src\Application\Game\GameObject.h">
       <Filter>Src\Application\Game</Filter>
     </ClInclude>
+    <ClInclude Include="Src\System\Utility\KdResourceFactory.h">
+      <Filter>Src\System\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Component\CameraComponent.h">
+      <Filter>Src\Application\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -244,6 +253,12 @@
     </ClCompile>
     <ClCompile Include="Src\Application\Game\GameObject.cpp">
       <Filter>Src\Application\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\System\Utility\KdResourceFactory.cpp">
+      <Filter>Src\System\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Component\CameraComponent.cpp">
+      <Filter>Src\Application\Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -4,16 +4,7 @@
 
 void Aircraft::Deserialize()
 {
-	m_spModel = std::make_shared<KdModel>();
-	if (m_spModel == nullptr)
-	{
-		return;
-	}
-
-	if (m_spModel->Load("Data/Aircraft/Aircraft_body.gltf") == false)
-	{
-		m_spModel = nullptr;
-	}
+	m_spModel = KdResourceFactory::GetInstance().GetModel("Data/Aircraft/Aircraft_body.gltf");
 
 	// 初期配置座標を地面から少し浮いた位置にする
 	m_mWorld.CreateTranslation(0.0f, 5.0f, 0.0f);
