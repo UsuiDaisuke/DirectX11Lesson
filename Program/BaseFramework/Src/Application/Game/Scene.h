@@ -3,6 +3,7 @@
 // 前方宣言
 class GameObject;
 class EditorCamera;
+class CameraComponent;
 
 class Scene
 {
@@ -35,6 +36,8 @@ public:
 	// デバッグ軸描画
 	void AddDebugCoordinateAxisLine(const Math::Vector3& pos, float scale = 1.0f);
 
+	inline void SetTargetCamera(std::shared_ptr<CameraComponent> spCamera) { m_wpTargetCamera = spCamera; }
+
 private:
 	Scene();
 
@@ -43,6 +46,9 @@ private:
 	bool			m_editorCameraEnable = true;
 
 	std::list<std::shared_ptr<GameObject>> m_objects;
+
+	//ターゲットのカメラ
+	std::weak_ptr<CameraComponent> m_wpTargetCamera;
 
 	// デバッグライン描画用の頂点配列
 	std::vector<KdEffectShader::Vertex> m_debugLines;

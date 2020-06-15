@@ -1,6 +1,8 @@
 ﻿#include "Aircraft.h"
 #include "Missile.h"
+
 #include "../Scene.h"
+#include "../../Component/CameraComponent.h"
 
 void Aircraft::Deserialize()
 {
@@ -9,11 +11,15 @@ void Aircraft::Deserialize()
 	// 初期配置座標を地面から少し浮いた位置にする
 	m_mWorld.CreateTranslation(0.0f, 5.0f, 0.0f);
 
-	m_mOffset = Math::Matrix::CreateRotationX(DirectX::XMConvertToRadians(15));
-	m_mOffset *= Math::Matrix::CreateTranslation(0.0f, 2.0f, -10.0f);
+	if (m_spCameraComponent)
+	{
+		m_spCameraComponent->GetOffsetMatrix().CreateTranslation(0.0f, 1.5f, -10.0f);
+	}
 
-	m_mProj = DirectX::XMMatrixPerspectiveFovLH(DirectX::XMConvertToRadians(60),
-		D3D.GetBackBuffer()->GetAspectRatio(), 0.01f, 5000.0f);
+	if ((GetTag() & OBJECT_TAG::TAG_Player) != 0)
+	{
+		Scene::GetInstance().SetTargetCamera(m_spCameraComponent);
+	}
 }
 
 void Aircraft::Update()
@@ -21,6 +27,11 @@ void Aircraft::Update()
 	UpdateMove();
 
 	UpdateShoot();
+
+	if (m_spCameraComponent)
+	{
+		m_spCameraComponent->SetCameraMatrix(m_mWorld);
+	}
 }
 
 void Aircraft::ImGuiUpdate()
@@ -43,24 +54,6 @@ void Aircraft::ImGuiUpdate()
 
 		ImGui::TreePop();
 	}
-}
-
-void Aircraft::SetCameraToShader()
-{
-	//追従カメラ行列の作成 : 追従カメラからの相対座標行列に、ゲーム上の飛行機の絶対座標行列を合成
-	KdMatrix mCam = m_mOffset * m_mWorld;
-
-	//追従カメラ座標をシェーダーにセット
-	SHADER.m_cb7_Camera.Work().CamPos = mCam.GetTranslation();
-
-	//追従カメラのビュー行列をシェーダーにセット
-	SHADER.m_cb7_Camera.Work().mV = mCam.Invert();
-
-	//追従カメラの射影行列をシェーダーにセット
-	SHADER.m_cb7_Camera.Work().mP = m_mProj;
-
-	//カメラ情報(ビュー行列、射影行列)を、シェーダーの定数バッファへセット
-	SHADER.m_cb7_Camera.Write();
 }
 
 void Aircraft::UpdateMove()

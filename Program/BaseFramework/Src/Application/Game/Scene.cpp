@@ -1,5 +1,6 @@
 ﻿#include "Scene.h"
 #include "GameObject.h"
+#include "../Component/CameraComponent.h"
 
 #include "EditorCamera.h"
 #include "Shooting/StageObject.h"
@@ -39,6 +40,7 @@ void Scene::Deserialize()
 
 	if (spAircraft)
 	{
+		spAircraft->SetTag(OBJECT_TAG::TAG_Player);
 		spAircraft->Deserialize();
 		m_objects.push_back(spAircraft);
 	}
@@ -98,7 +100,11 @@ void Scene::Draw()
 	}
 	else 
 	{
-
+		std::shared_ptr<CameraComponent> spCamera = m_wpTargetCamera.lock();
+		if (spCamera)
+		{
+			spCamera->SetToShader();
+		}
 	}
 
 	// ライトの情報をリセット
