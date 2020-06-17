@@ -156,6 +156,7 @@
     <ClInclude Include="..\Library\tinygltf\tiny_gltf.h" />
     <ClInclude Include="Src\Application\Component\CameraComponent.h" />
     <ClInclude Include="Src\Application\Component\InputComponent.h" />
+    <ClInclude Include="Src\Application\Component\ModelComponent.h" />
     <ClInclude Include="Src\Application\Game\EditorCamera.h" />
     <ClInclude Include="Src\Application\Game\GameObject.h" />
     <ClInclude Include="Src\Application\Game\Scene.h" />
@@ -190,6 +191,7 @@
     <ClCompile Include="..\Library\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Src\Application\Component\CameraComponent.cpp" />
     <ClCompile Include="Src\Application\Component\InputComponent.cpp" />
+    <ClCompile Include="Src\Application\Component\ModelComponent.cpp" />
     <ClCompile Include="Src\Application\Game\EditorCamera.cpp" />
     <ClCompile Include="Src\Application\Game\GameObject.cpp" />
     <ClCompile Include="Src\Application\Game\Scene.cpp" />

@@ -174,6 +174,9 @@
     <ClInclude Include="Src\Application\Component\InputComponent.h">
       <Filter>Src\Application\Component</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Application\Component\ModelComponent.h">
+      <Filter>Src\Application\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -264,6 +267,9 @@
       <Filter>Src\Application\Component</Filter>
     </ClCompile>
     <ClCompile Include="Src\Application\Component\InputComponent.cpp">
+      <Filter>Src\Application\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Component\ModelComponent.cpp">
       <Filter>Src\Application\Component</Filter>
     </ClCompile>
   </ItemGroup>

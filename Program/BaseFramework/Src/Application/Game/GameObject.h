@@ -2,6 +2,7 @@
 
 class CameraComponent;
 class InputComponent;
+class ModelComponent;
 
 //タグ定数
 enum OBJECT_TAG
@@ -26,6 +27,10 @@ public:
 	{
 		m_mWorld = rMat;
 	}
+	inline KdMatrix GetMatrix() const
+	{
+		return m_mWorld;
+	}
 	inline bool IsAlive() const
 	{
 		return m_alive;
@@ -49,8 +54,9 @@ protected:
 	std::shared_ptr<CameraComponent> m_spCameraComponent = std::make_shared<CameraComponent>(*this);
 	//インプットコンポーネント
 	std::shared_ptr<InputComponent> m_spInputComponent = std::make_shared<InputComponent>(*this);
+	//モデルコンポーネント
+	std::shared_ptr<ModelComponent> m_spModelComponent = std::make_shared<ModelComponent>(*this);
 
-	std::shared_ptr<KdModel> m_spModel = nullptr;
 	KdMatrix	m_mWorld;
 	bool		m_alive		=	true;
 	UINT		m_tag		=	OBJECT_TAG::TAG_None;

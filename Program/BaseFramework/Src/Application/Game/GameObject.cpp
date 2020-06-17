@@ -2,6 +2,7 @@
 
 #include "../Component/CameraComponent.h"
 #include "../Component/InputComponent.h"
+#include "../Component/ModelComponent.h"
 
 GameObject::GameObject()
 {
@@ -25,19 +26,12 @@ void GameObject::Update()
 
 void GameObject::Draw()
 {
-	if (m_spModel == nullptr)
-	{
-		return;
-	}
+	if (m_spModelComponent == nullptr){ return; }
 
-	SHADER.m_standardShader.SetWorldMatrix(m_mWorld);
-	SHADER.m_standardShader.DrawMesh(m_spModel->GetMesh().get(), m_spModel->GetMaterials());
+	m_spModelComponent->Draw();
 }
 
 void GameObject::Release()
 {
-	if (m_spModel)
-	{
-		m_spModel.reset();
-	}
+
 }

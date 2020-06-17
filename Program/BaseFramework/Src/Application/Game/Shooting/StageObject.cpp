@@ -1,6 +1,8 @@
 ﻿#include"StageObject.h"
 
+#include"Application/Component/ModelComponent.h"
+
 void StageObject::Deserialize()
 {
-	m_spModel = KdResourceFactory::GetInstance().GetModel("Data/StageMap/StageMap.gltf");
+	m_spModelComponent->SetModel(KdResFac.GetModel("Data/StageMap/StageMap.gltf"));
 }

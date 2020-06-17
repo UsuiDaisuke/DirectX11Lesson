@@ -35,3 +35,5 @@ public:
 	}
 
 };
+
+#define KdResFac KdResourceFactory::GetInstance()

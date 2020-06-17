@@ -4,10 +4,11 @@
 #include "../Scene.h"
 #include "../../Component/CameraComponent.h"
 #include "../../Component/InputComponent.h"
+#include "../../Component/ModelComponent.h"
 
 void Aircraft::Deserialize()
 {
-	m_spModel = KdResourceFactory::GetInstance().GetModel("Data/Aircraft/Aircraft_body.gltf");
+	m_spModelComponent->SetModel(KdResFac.GetModel("Data/Aircraft/Aircraft_body.gltf"));
 
 	// 初期配置座標を地面から少し浮いた位置にする
 	m_mWorld.CreateTranslation(0.0f, 5.0f, 0.0f);
@@ -74,7 +75,7 @@ void Aircraft::UpdateMove()
 
 	const Math::Vector2& inputMove = m_spInputComponent->GetAxis(Input::Axes::L);
 	//移動ベクトル作成
-	KdVec3 move = {inputMove.x, 0.0f, inputMove.y};
+	KdVec3 move = { inputMove.x, 0.0f, inputMove.y };
 
 	move.Normalize();
 
