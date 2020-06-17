@@ -3,6 +3,7 @@
 
 #include "../Scene.h"
 #include "../../Component/CameraComponent.h"
+#include "../../Component/InputComponent.h"
 
 void Aircraft::Deserialize()
 {
@@ -20,10 +21,18 @@ void Aircraft::Deserialize()
 	{
 		Scene::GetInstance().SetTargetCamera(m_spCameraComponent);
 	}
+
+	//プレイヤー入力
+	m_spInputComponent = std::make_shared<PlayerInputComponent>(*this);
 }
 
 void Aircraft::Update()
 {
+	if (m_spInputComponent)
+	{
+		m_spInputComponent->Update();
+	}
+
 	UpdateMove();
 
 	UpdateShoot();
@@ -58,25 +67,14 @@ void Aircraft::ImGuiUpdate()
 
 void Aircraft::UpdateMove()
 {
-	//移動ベクトル作成
-	KdVec3 move;
+	if (m_spInputComponent == nullptr)
+	{
+		return;
+	}
 
-	if (GetAsyncKeyState(VK_UP) & 0x8000)
-	{
-		move.z = 1.0f;
-	}
-	if (GetAsyncKeyState(VK_DOWN) & 0x8000)
-	{
-		move.z = -1.0f;
-	}
-	if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
-	{
-		move.x = 1.0f;
-	}
-	if (GetAsyncKeyState(VK_LEFT) & 0x8000)
-	{
-		move.x = -1.0f;
-	}
+	const Math::Vector2& inputMove = m_spInputComponent->GetAxis(Input::Axes::L);
+	//移動ベクトル作成
+	KdVec3 move = {inputMove.x, 0.0f, inputMove.y};
 
 	move.Normalize();
 
@@ -99,24 +97,8 @@ void Aircraft::UpdateMove()
 	m_mWorld = moveMat * m_mWorld;
 
 	//回転ベクトル作成
-	KdVec3 rotate;
-
-	if (GetAsyncKeyState('W') & 0x8000)
-	{
-		rotate.x = 1.0f;
-	}
-	if (GetAsyncKeyState('A') & 0x8000)
-	{
-		rotate.z = 1.0f;
-	}
-	if (GetAsyncKeyState('S') & 0x8000)
-	{
-		rotate.x = -1.0f;
-	}
-	if (GetAsyncKeyState('D') & 0x8000)
-	{
-		rotate.z = -1.0f;
-	}
+	const Math::Vector2& inputRotate = m_spInputComponent->GetAxis(Input::Axes::R);
+	KdVec3 rotate = { inputRotate.y, 0.0f, -inputRotate.x };
 
 	//回転行列作成
 	//Math::Matrix rotateMat = DirectX::XMMatrixRotationX(rotate.x * KdToRadians);
@@ -132,7 +114,12 @@ void Aircraft::UpdateMove()
 
 void Aircraft::UpdateShoot()
 {
-	if (GetAsyncKeyState(VK_SPACE) & 0x8000)
+	if (m_spInputComponent == nullptr)
+	{
+		return;
+	}
+
+	if (m_spInputComponent->GetButton(Input::Buttons::A))
 	{
 		if (m_canShoot)
 		{

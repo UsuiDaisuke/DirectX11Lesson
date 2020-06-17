@@ -171,6 +171,9 @@
     <ClInclude Include="Src\Application\Component\CameraComponent.h">
       <Filter>Src\Application\Component</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Application\Component\InputComponent.h">
+      <Filter>Src\Application\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -258,6 +261,9 @@
       <Filter>Src\System\Utility</Filter>
     </ClCompile>
     <ClCompile Include="Src\Application\Component\CameraComponent.cpp">
+      <Filter>Src\Application\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Component\InputComponent.cpp">
       <Filter>Src\Application\Component</Filter>
     </ClCompile>
   </ItemGroup>

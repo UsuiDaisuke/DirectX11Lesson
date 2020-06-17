@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 class CameraComponent;
+class InputComponent;
 
 //タグ定数
 enum OBJECT_TAG
@@ -46,6 +47,8 @@ protected:
 
 	//カメラコンポーネント
 	std::shared_ptr<CameraComponent> m_spCameraComponent = std::make_shared<CameraComponent>(*this);
+	//インプットコンポーネント
+	std::shared_ptr<InputComponent> m_spInputComponent = std::make_shared<InputComponent>(*this);
 
 	std::shared_ptr<KdModel> m_spModel = nullptr;
 	KdMatrix	m_mWorld;

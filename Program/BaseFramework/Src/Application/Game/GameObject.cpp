@@ -1,6 +1,7 @@
 ﻿#include "GameObject.h"
 
 #include "../Component/CameraComponent.h"
+#include "../Component/InputComponent.h"
 
 GameObject::GameObject()
 {
