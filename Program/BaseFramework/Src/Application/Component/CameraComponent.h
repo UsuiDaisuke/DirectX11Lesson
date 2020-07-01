@@ -37,5 +37,5 @@ private:
 	//射影行列
 	KdMatrix m_mProj;
 
-	GameObject m_owner;
+	GameObject& m_owner;
 };
