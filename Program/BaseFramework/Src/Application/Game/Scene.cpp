@@ -102,7 +102,7 @@ void Scene::Deserialize()
 	if (spAircraft)
 	{
 		spAircraft->SetTag(OBJECT_TAG::TAG_Player);
-		spAircraft->Deserialize();
+		spAircraft->Deserialize(KdLoadJson("Data/Scene/Aircraft.json"));
 		m_objects.push_back(spAircraft);
 	}
 }

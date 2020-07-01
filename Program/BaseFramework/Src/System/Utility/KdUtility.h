@@ -86,3 +86,34 @@ std::string KdFormat(const std::string& fmt, Args ... args)
 void KdGetTextureInfo(ID3D11View* view, D3D11_TEXTURE2D_DESC& outDesc);
 
 
+//=====================================================
+//
+// JSON
+//
+//=====================================================
+
+//Json読み込み
+inline json11::Json KdLoadJson(const std::string& filename)
+{
+	//Jsonファイルを開く
+	std::ifstream ifs(filename);
+	if (ifs.fail()) { 
+		assert(0 && "Jsonファイルのパスが間違っています"); 
+		return nullptr;
+	}
+
+	//文字列として全読み込み
+	std::string strJson((std::istream_iterator<char>(ifs)), std::istream_iterator<char>());
+
+	//文字列のJSONを解析(パース)する
+	std::string err;
+	json11::Json jsonObj = json11::Json::parse(strJson, err);
+	if (err.size() > 0) { 
+		assert(0 && "読み込んだファイルのJson変換に失敗"); 
+		return nullptr;
+	}
+
+	return jsonObj;
+}
+
+
