@@ -52,6 +52,9 @@
     <Filter Include="Src\Application\Component">
       <UniqueIdentifier>{c1f980b0-d28c-46b5-b2bd-7ddcaa71d81d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Library\json11KdCustom">
+      <UniqueIdentifier>{f5b611bb-a414-4504-aa68-07d85307070f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Pch.h">
@@ -177,6 +180,9 @@
     <ClInclude Include="Src\Application\Component\ModelComponent.h">
       <Filter>Src\Application\Component</Filter>
     </ClInclude>
+    <ClInclude Include="..\Library\json11KdCustom\json11.hpp">
+      <Filter>Library\json11KdCustom</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -271,6 +277,9 @@
     </ClCompile>
     <ClCompile Include="Src\Application\Component\ModelComponent.cpp">
       <Filter>Src\Application\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Library\json11KdCustom\json11.cpp">
+      <Filter>Library\json11KdCustom</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
