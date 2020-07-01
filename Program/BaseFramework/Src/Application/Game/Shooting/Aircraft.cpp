@@ -18,10 +18,16 @@ void Aircraft::Deserialize(const json11::Json& jsonObj)
 	if ((GetTag() & OBJECT_TAG::TAG_Player) != 0)
 	{
 		Scene::GetInstance().SetTargetCamera(m_spCameraComponent);
+
+		//プレイヤー入力
+		m_spInputComponent = std::make_shared<PlayerInputComponent>(*this);
+	}
+	else
+	{
+		//敵飛行機入力
+		m_spInputComponent = std::make_shared<EnemyInputComponent>(*this);
 	}
 
-	//プレイヤー入力
-	m_spInputComponent = std::make_shared<PlayerInputComponent>(*this);
 }
 
 void Aircraft::Update()

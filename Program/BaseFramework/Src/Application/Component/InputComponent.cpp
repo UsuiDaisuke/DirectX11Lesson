@@ -86,3 +86,9 @@ void PlayerInputComponent::Update()
 	if (GetAsyncKeyState('E')) { PushButton(Input::Buttons::R1); }
 	else { ReleaseButton(Input::Buttons::R1); }
 }
+
+void EnemyInputComponent::Update()
+{
+	m_axes[Input::Axes::L].y = 1.0f;
+	m_axes[Input::Axes::R].y = -1.0f;
+}

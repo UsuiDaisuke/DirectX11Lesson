@@ -101,9 +101,16 @@ void Scene::Deserialize()
 
 	if (spAircraft)
 	{
-		spAircraft->SetTag(OBJECT_TAG::TAG_Player);
 		spAircraft->Deserialize(KdLoadJson("Data/Scene/Aircraft.json"));
 		m_objects.push_back(spAircraft);
+	}
+
+	std::shared_ptr<Aircraft> spEnemyAircraft = std::make_shared<Aircraft>();
+
+	if (spEnemyAircraft)
+	{
+		spEnemyAircraft->Deserialize(KdLoadJson("Data/Scene/Enemy.json"));
+		m_objects.push_back(spEnemyAircraft);
 	}
 }
 
