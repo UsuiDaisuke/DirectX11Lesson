@@ -5,9 +5,15 @@
 
 void Missile::Deserialize(const json11::Json& jsonObj)
 {
+	m_lifeSpan = APP.m_maxFps * 10;
+
+	if (jsonObj.is_null()) { return; }
 	GameObject::Deserialize(jsonObj);
 
-	m_lifeSpan = APP.m_maxFps * 10;
+	if (jsonObj["Speed"].is_null() == false)
+	{
+		m_speed = jsonObj["Speed"].number_value();
+	}
 }
 
 void Missile::Update()

@@ -60,4 +60,5 @@ protected:
 	KdMatrix	m_mWorld;
 	bool		m_alive		=	true;
 	UINT		m_tag		=	OBJECT_TAG::TAG_None;
+	std::string m_name = "GameObject";
 };

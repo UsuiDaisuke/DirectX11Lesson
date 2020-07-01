@@ -1,3 +1,7 @@
 {
-  "ModelFileName":"Data/Aircraft/Aircraft_body.gltf"
+  "Name": "Aircraft",
+  "Tag": 2,
+  "ModelFileName": "Data/Aircraft/Aircraft_body.gltf",
+  "Pos": [ 0, 10, 0 ],
+  "Rot": [ 0, 15, 0 ]
 }

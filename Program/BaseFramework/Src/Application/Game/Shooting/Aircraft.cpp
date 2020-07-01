@@ -10,9 +10,6 @@ void Aircraft::Deserialize(const json11::Json& jsonObj)
 {
 	GameObject::Deserialize(jsonObj);
 
-	// 初期配置座標を地面から少し浮いた位置にする
-	m_mWorld.CreateTranslation(0.0f, 5.0f, 0.0f);
-
 	if (m_spCameraComponent)
 	{
 		m_spCameraComponent->GetOffsetMatrix().CreateTranslation(0.0f, 1.5f, -10.0f);
