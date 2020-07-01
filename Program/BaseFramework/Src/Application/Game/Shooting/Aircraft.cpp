@@ -6,15 +6,9 @@
 #include "../../Component/InputComponent.h"
 #include "../../Component/ModelComponent.h"
 
-void Aircraft::Deserialize(const json11::Json jsonObj)
+void Aircraft::Deserialize(const json11::Json& jsonObj)
 {
-	if (jsonObj.is_null() == false)
-	{
-		if (m_spModelComponent)
-		{
-			m_spModelComponent->SetModel(KdResFac.GetModel(jsonObj["ModelFileName"].string_value()));
-		}
-	}
+	GameObject::Deserialize(jsonObj);
 
 	// 初期配置座標を地面から少し浮いた位置にする
 	m_mWorld.CreateTranslation(0.0f, 5.0f, 0.0f);
@@ -133,7 +127,7 @@ void Aircraft::UpdateShoot()
 			std::shared_ptr<Missile> spMissile = std::make_shared<Missile>();
 			if (spMissile)
 			{
-				spMissile->Deserialize();
+				spMissile->Deserialize(KdLoadJson("Data/Scene/Missile.json"));
 				spMissile->SetMatrix(m_mWorld);
 
 				Scene::GetInstance().AddObject(spMissile);

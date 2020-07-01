@@ -3,9 +3,9 @@
 #include"Application/main.h"
 #include"../../Component/ModelComponent.h"
 
-void Missile::Deserialize()
+void Missile::Deserialize(const json11::Json& jsonObj)
 {
-	m_spModelComponent->SetModel(KdResFac.GetModel("Data/Missile/Missile.gltf"));
+	GameObject::Deserialize(jsonObj);
 
 	m_lifeSpan = APP.m_maxFps * 10;
 }

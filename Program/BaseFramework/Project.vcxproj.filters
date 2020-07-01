@@ -123,9 +123,6 @@
     <ClInclude Include="Src\Application\Game\EditorCamera.h">
       <Filter>Src\Application\Game</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Application\Game\Shooting\StageObject.h">
-      <Filter>Src\Application\Game\Shooting</Filter>
-    </ClInclude>
     <ClInclude Include="Src\Application\Game\Shooting\Aircraft.h">
       <Filter>Src\Application\Game\Shooting</Filter>
     </ClInclude>
@@ -232,9 +229,6 @@
     </ClCompile>
     <ClCompile Include="Src\Application\Game\EditorCamera.cpp">
       <Filter>Src\Application\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Application\Game\Shooting\StageObject.cpp">
-      <Filter>Src\Application\Game\Shooting</Filter>
     </ClCompile>
     <ClCompile Include="Src\Application\Game\Shooting\Aircraft.cpp">
       <Filter>Src\Application\Game\Shooting</Filter>

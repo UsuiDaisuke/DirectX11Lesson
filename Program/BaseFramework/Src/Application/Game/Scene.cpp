@@ -3,7 +3,6 @@
 #include "../Component/CameraComponent.h"
 
 #include "EditorCamera.h"
-#include "Shooting/StageObject.h"
 #include "Shooting/Aircraft.h"
 #include "Shooting/Missile.h"
 
@@ -89,11 +88,12 @@ void Scene::Init()
 
 void Scene::Deserialize()
 {
-	std::shared_ptr<StageObject> spGround = std::make_shared<StageObject>();
+	
+	std::shared_ptr<GameObject> spGround = std::make_shared<GameObject>();
 
 	if (spGround)
 	{
-		spGround->Deserialize();
+		spGround->Deserialize(KdLoadJson("Data/Scene/StageMap.json"));
 		m_objects.push_back(spGround);
 	}
 

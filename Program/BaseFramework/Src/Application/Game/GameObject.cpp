@@ -11,12 +11,17 @@ GameObject::GameObject()
 
 GameObject::~GameObject()
 {
-	
+	Release();
 }
 
-void GameObject::Deserialize()
+void GameObject::Deserialize(const json11::Json& jsonObj)
 {
+	if (jsonObj.is_null()) { return; }
 
+	if (m_spModelComponent)
+	{
+		m_spModelComponent->SetModel(KdResFac.GetModel(jsonObj["ModelFileName"].string_value()));
+	}
 }
 
 void GameObject::Update()
@@ -26,7 +31,7 @@ void GameObject::Update()
 
 void GameObject::Draw()
 {
-	if (m_spModelComponent == nullptr){ return; }
+	if (m_spModelComponent == nullptr) { return; }
 
 	m_spModelComponent->Draw();
 }
