@@ -23,6 +23,8 @@ public:
 	void Update();		//更新処理
 	void Draw();		//描画処理
 
+	void LoadScene(const std::string& sceneFilename);
+
 	void AddObject(std::shared_ptr<GameObject> pObject);
 	const std::list<std::shared_ptr<GameObject>> 
 		GetObjects() const { return m_spObjects; }

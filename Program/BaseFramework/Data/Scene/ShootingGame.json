@@ -1,0 +1,31 @@
+{
+  "GameObjects": [
+    {
+      "ClassName": "GameObject",
+      "Name": "StageMap",
+      "ModelFileName": "Data/StageMap/StageMap.gltf",
+      "Scale": [ 3, 1, 3 ]
+    },
+    {
+      "ClassName": "Aircraft",
+      "Name": "Player",
+      "ModelFileName": "Data/Aircraft/Aircraft_body.gltf",
+      "Tag": 2,
+      "Pos": [ 0, 10, 0 ]
+    },
+    {
+      "ClassName": "Aircraft",
+      "Name": "Enemy01",
+      "ModelFileName": "Data/Aircraft/Aircraft_body.gltf",
+      "Pos": [ -3, 10, 20 ],
+      "Rot": [ 0, 45, 0 ]
+    },
+    {
+      "ClassName": "Aircraft",
+      "Name": "Enemy02",
+      "ModelFileName": "Data/Aircraft/Aircraft_body.gltf",
+      "Pos": [ 3, 15, 20 ],
+      "Rot": [ 0, -45, 0 ]
+    }
+  ]
+}

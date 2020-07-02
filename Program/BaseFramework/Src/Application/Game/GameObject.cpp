@@ -1,4 +1,5 @@
 ﻿#include "GameObject.h"
+#include "../Game/Shooting/Aircraft.h"
 
 #include "../Component/CameraComponent.h"
 #include "../Component/InputComponent.h"
@@ -110,4 +111,19 @@ bool GameObject::HitCheckBySphere(const SphereInfo& rInfo)
 void GameObject::Release()
 {
 
+}
+
+std::shared_ptr<GameObject> CreateGameObject(const std::string& name)
+{
+	if (name == "GameObject") {
+		return std::make_shared<GameObject>();
+	}
+	else if(name == "Aircraft"){
+		return std::make_shared<Aircraft>();
+	}
+
+	// 文字列が既存クラスに一致しなかった
+	assert(0 && "存在しないGameObjectクラスです！");
+
+	return nullptr;
 }
