@@ -94,7 +94,7 @@ void Scene::Deserialize()
 	if (spGround)
 	{
 		spGround->Deserialize(KdLoadJson("Data/Scene/StageMap.json"));
-		m_objects.push_back(spGround);
+		m_spObjects.push_back(spGround);
 	}
 
 	std::shared_ptr<Aircraft> spAircraft = std::make_shared<Aircraft>();
@@ -102,7 +102,7 @@ void Scene::Deserialize()
 	if (spAircraft)
 	{
 		spAircraft->Deserialize(KdLoadJson("Data/Scene/Aircraft.json"));
-		m_objects.push_back(spAircraft);
+		m_spObjects.push_back(spAircraft);
 	}
 
 	std::shared_ptr<Aircraft> spEnemyAircraft = std::make_shared<Aircraft>();
@@ -110,7 +110,7 @@ void Scene::Deserialize()
 	if (spEnemyAircraft)
 	{
 		spEnemyAircraft->Deserialize(KdLoadJson("Data/Scene/Enemy.json"));
-		m_objects.push_back(spEnemyAircraft);
+		m_spObjects.push_back(spEnemyAircraft);
 	}
 }
 
@@ -126,7 +126,7 @@ void Scene::Release()
 		m_spCamera.reset();
 	}
 	
-	m_objects.clear();
+	m_spObjects.clear();
 }
 
 void Scene::Update()
@@ -138,17 +138,17 @@ void Scene::Update()
 		}
 	}
 
-	for (auto pObjects : m_objects)
+	for (auto pObjects : m_spObjects)
 	{
 		pObjects->Update();
 	}
 
-	for (auto spObjectItr = m_objects.begin(); spObjectItr != m_objects.end();)
+	for (auto spObjectItr = m_spObjects.begin(); spObjectItr != m_spObjects.end();)
 	{
 		//寿命が尽きていたらリストから除外
 		if ((*spObjectItr)->IsAlive() == false)
 		{
-			spObjectItr = m_objects.erase(spObjectItr);
+			spObjectItr = m_spObjects.erase(spObjectItr);
 		}
 		else
 		{
@@ -196,7 +196,7 @@ void Scene::Draw()
 
 	
 
-	for (auto pObjects : m_objects)
+	for (auto pObjects : m_spObjects)
 	{
 		pObjects->Draw();
 	}
@@ -235,7 +235,7 @@ void Scene::AddObject(std::shared_ptr<GameObject> pObject)
 		return;
 	}
 
-	m_objects.push_back(pObject);
+	m_spObjects.push_back(pObject);
 }
 
 void Scene::ImGuiUpdate()

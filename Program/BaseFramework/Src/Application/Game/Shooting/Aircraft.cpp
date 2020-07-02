@@ -37,9 +37,13 @@ void Aircraft::Update()
 		m_spInputComponent->Update();
 	}
 
+	m_prevPos = m_mWorld.GetTranslation();
+
 	UpdateMove();
 
 	UpdateShoot();
+
+	UpdateCollision();
 
 	if (m_spCameraComponent)
 	{
@@ -142,5 +146,32 @@ void Aircraft::UpdateShoot()
 	else
 	{
 		m_canShoot = true;
+	}
+}
+
+void Aircraft::UpdateCollision()
+{
+	//球情報の作成
+	SphereInfo info;
+	info.m_pos = m_mWorld.GetTranslation();
+	info.m_radius = m_colRadius;
+	for (auto& obj : Scene::GetInstance().GetObjects())
+	{
+		// 自分自身を無視
+		if (obj.get() == this) { continue; }
+
+		// キャラクターと当たり判定をするのでそれ以外は無視
+		if (!(obj->GetTag() & TAG_Character)) { continue; }
+
+		// 当たり判定
+		if (obj->HitCheckBySphere(info))
+		{
+			Scene::GetInstance().AddDebugSphereLine(
+				m_mWorld.GetTranslation(), 2.0f, { 1.0f, 0.0f, 0.0f, 1.0f }
+			);
+
+			//移動する前の位置に戻る
+			m_mWorld.SetTranslation(m_prevPos);
+		}
 	}
 }

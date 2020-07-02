@@ -24,6 +24,8 @@ public:
 	void Draw();		//描画処理
 
 	void AddObject(std::shared_ptr<GameObject> pObject);
+	const std::list<std::shared_ptr<GameObject>> 
+		GetObjects() const { return m_spObjects; }
 
 	void ImGuiUpdate();	//ImGuiの更新
 
@@ -45,7 +47,7 @@ private:
 	std::shared_ptr <EditorCamera>	m_spCamera = nullptr;
 	bool			m_editorCameraEnable = true;
 
-	std::list<std::shared_ptr<GameObject>> m_objects;
+	std::list<std::shared_ptr<GameObject>> m_spObjects;
 
 	//ターゲットのカメラ
 	std::weak_ptr<CameraComponent> m_wpTargetCamera;
