@@ -2,16 +2,13 @@
   "GameObjects": [
     {
       "ClassName": "GameObject",
-      "Name": "StageMap",
-      "ModelFileName": "Data/StageMap/StageMap.gltf",
-      "Scale": [ 3, 1, 3 ]
+      "Prefab": "Data/Scene/StageMap.json",
+      "Name": "StageMap"
     },
     {
       "ClassName": "Aircraft",
-      "Name": "Player",
-      "ModelFileName": "Data/Aircraft/Aircraft_body.gltf",
-      "Tag": 2,
-      "Pos": [ 0, 10, 0 ]
+      "Prefab": "Data/Scene/Aircraft.json",
+      "Name": "Player"
     },
     {
       "ClassName": "Aircraft",

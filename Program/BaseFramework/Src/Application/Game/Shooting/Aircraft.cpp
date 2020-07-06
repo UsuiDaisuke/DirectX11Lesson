@@ -134,7 +134,7 @@ void Aircraft::UpdateShoot()
 			std::shared_ptr<Missile> spMissile = std::make_shared<Missile>();
 			if (spMissile)
 			{
-				spMissile->Deserialize(KdLoadJson("Data/Scene/Missile.json"));
+				spMissile->Deserialize(KdResFac.GetJSON("Data/Scene/Missile.json"));
 				spMissile->SetMatrix(m_mWorld);
 
 				Scene::GetInstance().AddObject(spMissile);

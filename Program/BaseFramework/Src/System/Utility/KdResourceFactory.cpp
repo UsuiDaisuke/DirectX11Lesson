@@ -25,3 +25,56 @@ std::shared_ptr<KdModel> KdResourceFactory::GetModel(const std::string& filename
 		return (*itFound).second;
 	}
 }
+
+json11::Json KdResourceFactory::GetJSON(const std::string& filename)
+{
+	// filenameの物があるか？(検索)
+	auto itFound = m_jsonMap.find(filename);
+	// ない場合
+	if (itFound == m_jsonMap.end())
+	{
+		//JSONファイルを文字列として読み込む
+		json11::Json json = LoadJSON(filename);
+		if (json.is_null())
+		{
+			assert(0 && "[GetJSON]jsonファイルが見つからない");
+
+			return nullptr;
+		}
+
+		//登録
+		m_jsonMap[filename] = json;
+
+		//返す
+		return json;
+	}
+	//ある場合
+	else {
+		return (*itFound).second;
+	}
+}
+
+//Json読み込み
+json11::Json KdResourceFactory::LoadJSON(const std::string& filename)
+{
+	//Jsonファイルを開く
+	std::ifstream ifs(filename);
+	if (ifs.fail()) {
+		assert(0 && "Jsonファイルのパスが間違っています");
+		return nullptr;
+	}
+
+	//文字列として全読み込み
+	std::string strJson((std::istream_iterator<char>(ifs)), std::istream_iterator<char>());
+
+	//文字列のJSONを解析(パース)する
+	std::string err;
+	json11::Json jsonObj = json11::Json::parse(strJson, err);
+	if (err.size() > 0) {
+		assert(0 && "読み込んだファイルのJson変換に失敗");
+		return nullptr;
+	}
+
+	return jsonObj;
+}
+
