@@ -138,6 +138,20 @@ void Aircraft::UpdateShoot()
 				spMissile->SetMatrix(m_mWorld);
 
 				Scene::GetInstance().AddObject(spMissile);
+
+				// 全ゲームオブジェクトのリストからミサイルが当たる対象を探す
+				for (auto object : Scene::GetInstance().GetObjects())
+				{
+					// 発射した飛行機自身は無視
+					if (object.get() == this) { continue; }
+
+					if ((object->GetTag() & TAG_AttackHit))
+					{
+						spMissile->SetTarget(object);
+
+						break;
+					}
+				}
 			}
 
 			m_canShoot = false;
