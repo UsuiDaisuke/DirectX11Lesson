@@ -108,13 +108,29 @@ bool GameObject::HitCheckBySphere(const SphereInfo& rInfo)
 	return isHit;
 }
 
+// レイによる当たり判定
 bool GameObject::HitCheckByRay(const RayInfo& rInfo)
 {
 	// 判定する対象のモデルがない場合は当たっていないとして帰る
 	if (!m_spModelComponent) { return false; }
 
+	//モデルの逆行列でレイを変換
+	KdMatrix invMat = m_mWorld;
+	invMat.Inverse();
+
+	//レイの判定開始位置を逆変換
+	KdVec3 rayPos = rInfo.m_pos;
+	rayPos.TransformCoord(invMat);
+
 	// 発射方向は正規化されていないと正しく判定できないので正規化
 	KdVec3 rayDir = rInfo.m_dir;
+	rayDir.TransformNormal(invMat);
+
+	//逆行列に拡縮が入っていると
+	//レイが当たった距離にも拡縮を反映されてしまうので
+	//判定用の最大距離にも拡縮を反映させておく
+	float rayCheckRange = rInfo.m_maxRange * rayDir.Length();
+
 	rayDir.Normalize();
 
 	// 面情報の取得
@@ -131,7 +147,7 @@ bool GameObject::HitCheckByRay(const RayInfo& rInfo)
 		// レイと三角形の当たり判定
 		float triDist = FLT_MAX;
 		bool bHit = DirectX::TriangleTests::Intersects(
-			rInfo.m_pos,	// 発射場所
+			rayPos,			// 発射場所
 			rayDir,			// 発射方向
 
 			// 判定する三角形の頂点情報
@@ -146,7 +162,7 @@ bool GameObject::HitCheckByRay(const RayInfo& rInfo)
 		if (bHit == false) { continue; }
 
 		// 最大距離以内か
-		if (triDist <= rInfo.m_maxRange)
+		if (triDist <= rayCheckRange)
 		{
 			return true;
 		}

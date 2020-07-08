@@ -137,6 +137,8 @@ void Aircraft::UpdateShoot()
 				spMissile->Deserialize(KdResFac.GetJSON("Data/Scene/Missile.json"));
 				spMissile->SetMatrix(m_mWorld);
 
+				spMissile->SetOwner(shared_from_this());
+
 				Scene::GetInstance().AddObject(spMissile);
 
 				// 全ゲームオブジェクトのリストからミサイルが当たる対象を探す

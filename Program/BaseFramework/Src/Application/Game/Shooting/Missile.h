@@ -10,10 +10,16 @@ public:
 
 	inline void SetTarget(const std::shared_ptr<GameObject>& spTarget) { m_wpTarget = spTarget; }
 
+	void UpdateCollision();
+	inline void SetOwner(const std::shared_ptr<GameObject>& spOwner) { m_wpOwner = spOwner; }
+
 private:
+
+	KdVec3		m_prevPos;
 
 	float		m_speed = 0.5f;
 	int			m_lifeSpan = 0;
 
 	std::weak_ptr<GameObject> m_wpTarget;
+	std::weak_ptr<GameObject> m_wpOwner;
 };

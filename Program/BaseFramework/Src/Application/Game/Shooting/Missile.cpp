@@ -1,6 +1,7 @@
 ﻿#include"Missile.h"
 
 #include"Application/main.h"
+#include"Application\Game\Scene.h"
 #include"../../Component/ModelComponent.h"
 
 void Missile::Deserialize(const json11::Json& jsonObj)
@@ -84,4 +85,25 @@ void Missile::Update()
 	move *= m_speed;
 
 	m_mWorld.Move(move);
+}
+
+void Missile::UpdateCollision()
+{
+	// 発射した主人をshared_ptr取得
+	auto spOwner = m_wpOwner.lock();
+
+	for (auto& obj : Scene::GetInstance().GetObjects())
+	{
+		// 自分自身を無視
+		if (obj.get() == this) { continue; }
+		// 発射した主人を無視
+		if (obj.get() == spOwner.get()) { continue; }
+
+		//TAG_Characterとは球判定を行う
+
+		//TAG_StageObjectとはレイ判定を行う
+
+		//当たったら
+		if(false)Destroy();
+	}
 }
