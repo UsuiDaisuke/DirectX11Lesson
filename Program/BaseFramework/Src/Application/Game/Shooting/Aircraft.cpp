@@ -122,6 +122,10 @@ void Aircraft::UpdateMove()
 
 void Aircraft::UpdateShoot()
 {
+	float distance = 10000.0f;
+	KdVec3 betweenVec;
+	KdVec3 myPos = m_mWorld.GetTranslation();
+
 	if (m_spInputComponent == nullptr)
 	{
 		return;
@@ -149,9 +153,12 @@ void Aircraft::UpdateShoot()
 
 					if ((object->GetTag() & TAG_AttackHit))
 					{
-						spMissile->SetTarget(object);
+						betweenVec = object->GetMatrix().GetTranslation() - myPos;
 
-						break;
+						if (distance > betweenVec.Length()) {
+							spMissile->SetTarget(object);
+							distance = betweenVec.Length();
+						}
 					}
 				}
 			}
