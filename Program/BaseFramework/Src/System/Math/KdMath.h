@@ -69,6 +69,17 @@ public:
 		return DirectX::XMVector3LengthSq(*this).m128_f32[0];
 	}
 
+	// 内積
+	static float Dot(const KdVec3& v1, const KdVec3& v2)
+	{
+		return DirectX::XMVector3Dot(v1, v2).m128_f32[0];
+	}
+
+	// 外積
+	static KdVec3 Cross(const KdVec3& v1, const KdVec3& v2)
+	{
+		return DirectX::XMVector3Cross(v1, v2);
+	}
 };
 
 //4x4の行列
@@ -119,6 +130,12 @@ public:
 	void CreateTranslation(float x, float y, float z)
 	{
 		*this = DirectX::XMMatrixTranslation(x, y, z);
+	}
+
+	//回転行列作成
+	void CreateRotationAxis(KdVec3 vec, float angle)
+	{
+		*this = DirectX::XMMatrixRotationAxis(vec, angle);
 	}
 
 	//X軸回転行列
