@@ -19,7 +19,7 @@ public:
 	inline const std::shared_ptr<KdModel>& GetModel() const { return m_spModel; }
 
 	//メッシュ取得
-	inline const std::shared_ptr<KdMesh>& GetMesh() const
+	inline const std::shared_ptr<KdMesh> GetMesh() const
 	{
 		if (m_spModel == nullptr){ return nullptr; }
 

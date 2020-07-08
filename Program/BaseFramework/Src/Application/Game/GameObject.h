@@ -5,6 +5,7 @@ class InputComponent;
 class ModelComponent;
 
 struct SphereInfo;
+struct RayInfo;
 
 //タグ定数
 enum OBJECT_TAG
@@ -12,6 +13,7 @@ enum OBJECT_TAG
 	TAG_None		=	0x00000000,		//属性なし:初期設定用
 	TAG_Character	=	0x00000001,		//キャラクター設定用
 	TAG_Player		=	0x00000002,		//プレイヤー設定用
+	TAG_StageObject	=	0x00000004,		//背景オブジェクト設定用
 	TAG_AttackHit	=	0x00000010,		//攻撃が当たる属性
 };
 
@@ -50,6 +52,7 @@ public:
 	std::shared_ptr<CameraComponent> getCameraComponent() { return m_spCameraComponent; }
 
 	bool HitCheckBySphere(const SphereInfo& rInfo);
+	bool HitCheckByRay(const RayInfo& rInfo);
 
 protected:
 
@@ -79,4 +82,11 @@ struct SphereInfo
 {
 	KdVec3 m_pos = {};
 	float m_radius = 0.0f;
+};
+
+struct RayInfo
+{
+	KdVec3 m_pos;
+	KdVec3 m_dir;
+	float m_maxRange = 0.0f;
 };

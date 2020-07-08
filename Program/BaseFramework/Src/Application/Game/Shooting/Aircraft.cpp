@@ -165,6 +165,14 @@ void Aircraft::UpdateShoot()
 
 void Aircraft::UpdateCollision()
 {
+	// 一回の移動量と移動方向を計算
+	KdVec3 moveVec = m_mWorld.GetTranslation() - m_prevPos;	// 動く前→今の場所のベクトル
+	float moveDistance = moveVec.Length();	//１回の移動量
+
+	// 動いていないなら判定しない
+	if (moveDistance == 0.0f) { return; }
+
+
 	//球情報の作成
 	SphereInfo info;
 	info.m_pos = m_mWorld.GetTranslation();
@@ -185,6 +193,31 @@ void Aircraft::UpdateCollision()
 			);
 
 			//移動する前の位置に戻る
+			m_mWorld.SetTranslation(m_prevPos);
+		}
+	}
+
+	// レイによる当たり判定
+	// レイ情報の作成
+	RayInfo rayInfo;
+	rayInfo.m_pos = m_prevPos;			// 一つ前の場所から
+	rayInfo.m_dir = moveVec;			// 動いた方向に向かって
+	rayInfo.m_maxRange = moveDistance;	//動いた分だけ判定を行う
+
+	rayInfo.m_dir.Normalize();
+
+	for (auto& obj : Scene::GetInstance().GetObjects())
+	{
+		// 自分自身は無視
+		if (obj.get() == this) { continue; }
+
+		// 背景タグ以外は無視
+		if (!(obj->GetTag() & TAG_StageObject)) { continue; }
+
+		// 判定実行
+		if (obj->HitCheckByRay(rayInfo))
+		{
+			// 移動する前のフレームに戻る
 			m_mWorld.SetTranslation(m_prevPos);
 		}
 	}

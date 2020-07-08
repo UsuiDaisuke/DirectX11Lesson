@@ -108,6 +108,53 @@ bool GameObject::HitCheckBySphere(const SphereInfo& rInfo)
 	return isHit;
 }
 
+bool GameObject::HitCheckByRay(const RayInfo& rInfo)
+{
+	// 判定する対象のモデルがない場合は当たっていないとして帰る
+	if (!m_spModelComponent) { return false; }
+
+	// 発射方向は正規化されていないと正しく判定できないので正規化
+	KdVec3 rayDir = rInfo.m_dir;
+	rayDir.Normalize();
+
+	// 面情報の取得
+	const std::shared_ptr<KdMesh>& mesh = m_spModelComponent->GetMesh();	//モデル(メッシュ)情報の取得
+	const KdMeshFace* pFaces = &mesh->GetFaces()[0];	// 面情報の先頭を取得
+	UINT faceNum = mesh->GetFaces().size();
+
+	// すべての面(三角形)と当たり判定
+	for (UINT faceIdx = 0; faceIdx < faceNum; ++faceIdx)
+	{
+		// 三角形を構成する3つの頂点のIndex
+		const UINT* idx = pFaces[faceIdx].Idx;
+
+		// レイと三角形の当たり判定
+		float triDist = FLT_MAX;
+		bool bHit = DirectX::TriangleTests::Intersects(
+			rInfo.m_pos,	// 発射場所
+			rayDir,			// 発射方向
+
+			// 判定する三角形の頂点情報
+			mesh->GetVertexPositions()[idx[0]],
+			mesh->GetVertexPositions()[idx[1]],
+			mesh->GetVertexPositions()[idx[2]],
+
+			triDist	// 当たった場合の距離
+		);
+
+		// ヒットしていなかったらスキップ
+		if (bHit == false) { continue; }
+
+		// 最大距離以内か
+		if (triDist <= rInfo.m_maxRange)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
 void GameObject::Release()
 {
 
