@@ -1,5 +1,6 @@
 {
   "Name": "Missile",
   "ModelFileName": "Data/Missile/Missile.gltf",
-  "Speed": 0.5
+  "Speed": 0.5,
+  "Radius": 2.0
 }

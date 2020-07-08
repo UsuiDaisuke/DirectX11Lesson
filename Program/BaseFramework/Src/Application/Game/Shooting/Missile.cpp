@@ -29,6 +29,9 @@ void Missile::Update()
 		Destroy();
 	}
 
+	//1フレーム前の座標保存
+	m_prevPos = m_mWorld.GetTranslation();
+
 	// ターゲットをshared_ptr化
 	auto target = m_wpTarget.lock();
 
@@ -85,12 +88,36 @@ void Missile::Update()
 	move *= m_speed;
 
 	m_mWorld.Move(move);
+
+	UpdateCollision();
 }
 
 void Missile::UpdateCollision()
 {
+	bool isHit = false;
+
+	// 一回の移動量と移動方向を計算
+	KdVec3 moveVec = m_mWorld.GetTranslation() - m_prevPos;	// 動く前→今の場所のベクトル
+	float moveDistance = moveVec.Length();	//１回の移動量
+
+	// 動いていないなら判定しない
+	if (moveDistance == 0.0f) { return; }
+
 	// 発射した主人をshared_ptr取得
 	auto spOwner = m_wpOwner.lock();
+
+	//球情報の作成
+	SphereInfo info;
+	info.m_pos = m_mWorld.GetTranslation();
+	info.m_radius = m_colRadius;
+
+	//レイ情報の作成
+	RayInfo rayInfo;
+	rayInfo.m_pos = m_prevPos;			// 一つ前の場所から
+	rayInfo.m_dir = moveVec;			// 動いた方向に向かって
+	rayInfo.m_maxRange = moveDistance;	//動いた分だけ判定を行う
+
+	rayInfo.m_dir.Normalize();
 
 	for (auto& obj : Scene::GetInstance().GetObjects())
 	{
@@ -100,10 +127,24 @@ void Missile::UpdateCollision()
 		if (obj.get() == spOwner.get()) { continue; }
 
 		//TAG_Characterとは球判定を行う
+		if (obj->GetTag() & TAG_Character)
+		{
+			if (obj->HitCheckBySphere(info))
+			{
+				isHit = true;
+			}
+		}
 
 		//TAG_StageObjectとはレイ判定を行う
+		if (obj->GetTag() & TAG_StageObject)
+		{
+			if (obj->HitCheckByRay(rayInfo))
+			{
+				isHit = true;
+			}
+		}
 
 		//当たったら
-		if(false)Destroy();
+		if(isHit)Destroy();
 	}
 }
