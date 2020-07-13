@@ -25,6 +25,9 @@
 // モデル
 #include "Direct3D/kdModel.h"
 
+// 判定系
+#include "Math/KdCollision.h"
+
 // シェーダ
 #include "Shader/KdShaderManager.h"
 

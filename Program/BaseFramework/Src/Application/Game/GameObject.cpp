@@ -114,61 +114,7 @@ bool GameObject::HitCheckByRay(const RayInfo& rInfo)
 	// 判定する対象のモデルがない場合は当たっていないとして帰る
 	if (!m_spModelComponent) { return false; }
 
-	//モデルの逆行列でレイを変換
-	KdMatrix invMat = m_mWorld;
-	invMat.Inverse();
-
-	//レイの判定開始位置を逆変換
-	KdVec3 rayPos = rInfo.m_pos;
-	rayPos.TransformCoord(invMat);
-
-	// 発射方向は正規化されていないと正しく判定できないので正規化
-	KdVec3 rayDir = rInfo.m_dir;
-	rayDir.TransformNormal(invMat);
-
-	//逆行列に拡縮が入っていると
-	//レイが当たった距離にも拡縮を反映されてしまうので
-	//判定用の最大距離にも拡縮を反映させておく
-	float rayCheckRange = rInfo.m_maxRange * rayDir.Length();
-
-	rayDir.Normalize();
-
-	// 面情報の取得
-	const std::shared_ptr<KdMesh>& mesh = m_spModelComponent->GetMesh();	//モデル(メッシュ)情報の取得
-	const KdMeshFace* pFaces = &mesh->GetFaces()[0];	// 面情報の先頭を取得
-	UINT faceNum = mesh->GetFaces().size();
-
-	// すべての面(三角形)と当たり判定
-	for (UINT faceIdx = 0; faceIdx < faceNum; ++faceIdx)
-	{
-		// 三角形を構成する3つの頂点のIndex
-		const UINT* idx = pFaces[faceIdx].Idx;
-
-		// レイと三角形の当たり判定
-		float triDist = FLT_MAX;
-		bool bHit = DirectX::TriangleTests::Intersects(
-			rayPos,			// 発射場所
-			rayDir,			// 発射方向
-
-			// 判定する三角形の頂点情報
-			mesh->GetVertexPositions()[idx[0]],
-			mesh->GetVertexPositions()[idx[1]],
-			mesh->GetVertexPositions()[idx[2]],
-
-			triDist	// 当たった場合の距離
-		);
-
-		// ヒットしていなかったらスキップ
-		if (bHit == false) { continue; }
-
-		// 最大距離以内か
-		if (triDist <= rayCheckRange)
-		{
-			return true;
-		}
-	}
-
-	return false;
+	return KdRayToMesh(rInfo.m_pos, rInfo.m_dir, rInfo.m_maxRange, *(m_spModelComponent)->GetMesh(), m_mWorld);
 }
 
 void GameObject::Release()

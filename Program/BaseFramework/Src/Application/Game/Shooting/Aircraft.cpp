@@ -122,9 +122,6 @@ void Aircraft::UpdateMove()
 
 void Aircraft::UpdateShoot()
 {
-	float distance = 10000.0f;
-	KdVec3 betweenVec;
-	KdVec3 myPos = m_mWorld.GetTranslation();
 
 	if (m_spInputComponent == nullptr)
 	{
@@ -144,6 +141,10 @@ void Aircraft::UpdateShoot()
 				spMissile->SetOwner(shared_from_this());
 
 				Scene::GetInstance().AddObject(spMissile);
+
+				float distance = FLT_MAX;
+				KdVec3 betweenVec;
+				KdVec3 myPos = m_mWorld.GetTranslation();
 
 				// 全ゲームオブジェクトのリストからミサイルが当たる対象を探す
 				for (auto object : Scene::GetInstance().GetObjects())
