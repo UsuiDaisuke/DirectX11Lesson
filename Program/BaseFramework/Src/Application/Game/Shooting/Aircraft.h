@@ -32,4 +32,30 @@ private:
 
 	int		m_hp = 10;
 	int			m_attackPow = 1;
+
+	// 基底アクションステート
+	class BaseAction
+	{
+	public:
+		virtual void Update(Aircraft& owner) = 0;
+	};
+
+	// 飛行中
+	class ActionFly : public BaseAction
+	{
+	public:
+		virtual void Update(Aircraft& owner) override;
+	};
+
+	// 墜落中
+	class ActionCrash : public BaseAction
+	{
+	public:
+		virtual void Update(Aircraft& owner) override;
+
+		int m_timer = 180;
+	};
+
+	// 現在実行するアクションステート
+	std::shared_ptr<BaseAction> m_spActionState;
 };

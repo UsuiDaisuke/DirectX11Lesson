@@ -34,6 +34,7 @@ void Aircraft::Deserialize(const json11::Json& jsonObj)
 		m_attackPow = jsonObj["Power"].int_value();
 	}
 
+	m_spActionState = std::make_shared<ActionFly>();
 }
 
 void Aircraft::Update()
@@ -45,11 +46,10 @@ void Aircraft::Update()
 
 	m_prevPos = m_mWorld.GetTranslation();
 
-	UpdateMove();
-
-	UpdateShoot();
-
-	UpdateCollision();
+	if (m_spActionState)
+	{
+		m_spActionState->Update(*this);
+	}
 
 	if (m_spCameraComponent)
 	{
@@ -318,6 +318,32 @@ void Aircraft::OnNotify_Damage(int damage)
 
 	if (m_hp <= 0)
 	{
-		Destroy();
+		m_spActionState = std::make_shared<ActionCrash>();
 	}
+}
+
+void Aircraft::ActionFly::Update(Aircraft& owner)
+{
+	owner.UpdateMove();
+
+	owner.UpdateCollision();
+
+	owner.UpdateShoot();
+}
+
+void Aircraft::ActionCrash::Update(Aircraft& owner)
+{
+	if (!(--m_timer))
+	{
+		owner.Destroy();
+	}
+
+	KdMatrix rotation;
+	rotation.CreateRotationX(0.08f);
+	rotation.RotateY(0.055f);
+	rotation.RotateZ(0.03f);
+
+	owner.m_mWorld = rotation * owner.m_mWorld;
+
+	owner.m_mWorld.Move(KdVec3(0.0f, -0.2f, 0.0f));
 }

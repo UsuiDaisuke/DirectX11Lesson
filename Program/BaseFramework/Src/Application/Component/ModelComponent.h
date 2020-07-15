@@ -16,7 +16,7 @@ public:
 	void SetEnable(bool enable) { m_enable = enable; }
 
 	//モデル取得
-	inline const std::shared_ptr<KdModel>& GetModel() const { return m_spModel; }
+	inline const std::shared_ptr<KdModel> GetModel() const { return m_spModel; }
 
 	//メッシュ取得
 	inline const std::shared_ptr<KdMesh> GetMesh() const
@@ -27,7 +27,7 @@ public:
 	}
 
 	//モデルセット
-	inline void SetModel(const std::shared_ptr<KdModel>& model) { m_spModel = model; }
+	inline void SetModel(const std::shared_ptr<KdModel> model) { m_spModel = model; }
 
 	//StandardShaderで描画
 	void Draw();
