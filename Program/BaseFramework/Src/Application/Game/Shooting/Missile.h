@@ -22,4 +22,6 @@ private:
 
 	std::weak_ptr<GameObject> m_wpTarget;
 	std::weak_ptr<GameObject> m_wpOwner;
+
+	int			m_attackPow = 5;
 };

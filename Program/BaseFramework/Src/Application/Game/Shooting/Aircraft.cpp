@@ -29,6 +29,11 @@ void Aircraft::Deserialize(const json11::Json& jsonObj)
 		m_spInputComponent = std::make_shared<EnemyInputComponent>(*this);
 	}
 
+	if (jsonObj["Power"].is_null() == false)
+	{
+		m_attackPow = jsonObj["Power"].int_value();
+	}
+
 }
 
 void Aircraft::Update()
@@ -199,6 +204,13 @@ void Aircraft::UpdateCollision()
 			// 当たり判定
 			if (obj->HitCheckByRay(rayInfo, rayResult))
 			{
+				// 相手の飛行機へダメージ通知
+				std::shared_ptr<Aircraft> aircraft = std::dynamic_pointer_cast<Aircraft>(obj);
+				if (aircraft)
+				{
+					aircraft->OnNotify_Damage(m_attackPow);
+				}
+
 				// 当たったのであれば爆発をインスタンス化
 				std::shared_ptr<EffectObject> effectObj = std::make_shared<EffectObject>();
 				if (effectObj)
@@ -297,5 +309,15 @@ void Aircraft::Draw()
 		laserEnd = laserStart + laserDir;	// レーザーの終点は発射位置ベクトル + レーザーの長さ
 
 		Scene::GetInstance().AddDebugLines(m_prevPos, laserEnd, { 0.0f, 1.0f, 1.0f, 1.0f });
+	}
+}
+
+void Aircraft::OnNotify_Damage(int damage)
+{
+	m_hp -= damage;
+
+	if (m_hp <= 0)
+	{
+		Destroy();
 	}
 }

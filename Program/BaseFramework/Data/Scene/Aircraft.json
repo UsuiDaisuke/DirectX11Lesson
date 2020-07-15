@@ -4,5 +4,6 @@
   "ModelFileName": "Data/Aircraft/Aircraft_body.gltf",
   "Pos": [ 0, 10, 0 ],
   "Rot": [ 0, 15, 0 ],
-  "Radius": 2.0
+  "Radius": 2.0,
+  "Power": 1
 }

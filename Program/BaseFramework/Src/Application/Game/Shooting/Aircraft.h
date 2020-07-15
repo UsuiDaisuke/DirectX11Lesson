@@ -18,6 +18,8 @@ public:
 
 	void Draw() override;	// 描画
 
+	void OnNotify_Damage(int damage);
+
 private:
 
 	float			m_speed = 0.2f;			// 移動スピード
@@ -27,4 +29,7 @@ private:
 
 	bool	m_laser = false;
 	float	m_laserRange = 1000.0f;
+
+	int		m_hp = 10;
+	int			m_attackPow = 1;
 };

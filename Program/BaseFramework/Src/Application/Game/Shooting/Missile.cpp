@@ -2,6 +2,8 @@
 
 #include"Application/main.h"
 #include"Application\Game\Scene.h"
+#include"Aircraft.h"
+#include"EffectObject.h"
 #include"../../Component/ModelComponent.h"
 
 void Missile::Deserialize(const json11::Json& jsonObj)
@@ -14,6 +16,11 @@ void Missile::Deserialize(const json11::Json& jsonObj)
 	if (jsonObj["Speed"].is_null() == false)
 	{
 		m_speed = jsonObj["Speed"].number_value();
+	}
+
+	if (jsonObj["Power"].is_null() == false)
+	{
+		m_attackPow = jsonObj["Power"].int_value();
 	}
 }
 
@@ -134,6 +141,26 @@ void Missile::UpdateCollision()
 			if (obj->HitCheckBySphere(info))
 			{
 				isHit = true;
+
+				std::shared_ptr<Aircraft> aircraft = std::dynamic_pointer_cast<Aircraft>(obj);
+				if (aircraft)
+				{
+					aircraft->OnNotify_Damage(m_attackPow);
+
+					std::shared_ptr<EffectObject> effectObj = std::make_shared<EffectObject>();
+					if (effectObj)
+					{
+						//キャラクターのリストに爆発の追加
+						Scene::GetInstance().AddObject(effectObj);
+
+						KdVec3 hitPos(m_mWorld.GetTranslation());
+
+						// 爆発エフェクトの行列を計算
+						KdMatrix mMat;
+						mMat.CreateTranslation(hitPos.x, hitPos.y, hitPos.z);
+						effectObj->SetMatrix(mMat);
+					}
+				}
 			}
 		}
 
