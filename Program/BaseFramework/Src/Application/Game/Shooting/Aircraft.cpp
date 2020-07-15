@@ -5,6 +5,7 @@
 #include "../../Component/CameraComponent.h"
 #include "../../Component/InputComponent.h"
 #include "../../Component/ModelComponent.h"
+#include "EffectObject.h"
 
 void Aircraft::Deserialize(const json11::Json& jsonObj)
 {
@@ -171,10 +172,53 @@ void Aircraft::UpdateShoot()
 	{
 		m_canShoot = true;
 	}
+
+	m_laser = (m_spInputComponent->GetButton(Input::B) != InputComponent::FREE);
 }
 
 void Aircraft::UpdateCollision()
 {
+	if (m_laser)
+	{
+		RayInfo rayInfo;
+		rayInfo.m_pos = m_prevPos;				// 移動する前の地点から
+		rayInfo.m_dir = m_mWorld.GetAxisZ();	// 自分の向いてる方向に
+		rayInfo.m_dir.Normalize();
+		rayInfo.m_maxRange = m_laserRange;		// レーザーの射程分判定
+
+		KdRayResult rayResult;
+
+		for (auto& obj : Scene::GetInstance().GetObjects())
+		{
+			// 自分自身を無視
+			if (obj.get() == this) { continue; }
+
+			// 背景とキャラクターが当たり判定をするのでそれ以外は無視
+			if (!(obj->GetTag() & (TAG_StageObject | TAG_Character))) { continue; }
+
+			// 当たり判定
+			if (obj->HitCheckByRay(rayInfo, rayResult))
+			{
+				// 当たったのであれば爆発をインスタンス化
+				std::shared_ptr<EffectObject> effectObj = std::make_shared<EffectObject>();
+				if (effectObj)
+				{
+					//キャラクターのリストに爆発の追加
+					Scene::GetInstance().AddObject(effectObj);
+
+					//レーザーのヒット位置　= レイの発射位置 + (レイの発射方向ベクトル * レイが当たった地点までの距離)
+					KdVec3 hitPos(rayInfo.m_pos);
+					hitPos = hitPos + (rayInfo.m_dir * rayResult.m_distance);
+
+					// 爆発エフェクトの行列を計算
+					KdMatrix mMat;
+					mMat.CreateTranslation(hitPos.x, hitPos.y, hitPos.z);
+					effectObj->SetMatrix(mMat);
+				}
+			}
+		}
+	}
+
 	// 一回の移動量と移動方向を計算
 	KdVec3 moveVec = m_mWorld.GetTranslation() - m_prevPos;	// 動く前→今の場所のベクトル
 	float moveDistance = moveVec.Length();	//１回の移動量
@@ -232,5 +276,26 @@ void Aircraft::UpdateCollision()
 			// 移動する前のフレームに戻る
 			m_mWorld.SetTranslation(m_prevPos);
 		}
+	}
+}
+
+void Aircraft::Draw()
+{
+	GameObject::Draw();
+
+	// レーザー描画
+	if (m_laser)
+	{
+		KdVec3 laserStart(m_prevPos);
+		KdVec3 laserEnd;
+		KdVec3 laserDir(m_mWorld.GetAxisZ());
+
+		laserDir.Normalize();	// 拡大が入っていると1以上になるので正規化
+
+		laserDir *= m_laserRange;	// レーザーの射程部方向のベクトルを伸ばす
+
+		laserEnd = laserStart + laserDir;	// レーザーの終点は発射位置ベクトル + レーザーの長さ
+
+		Scene::GetInstance().AddDebugLines(m_prevPos, laserEnd, { 0.0f, 1.0f, 1.0f, 1.0f });
 	}
 }

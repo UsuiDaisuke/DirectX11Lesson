@@ -183,6 +183,9 @@
     <ClInclude Include="Src\System\Math\KdCollision.h">
       <Filter>Src\System\Math</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Application\Game\Shooting\EffectObject.h">
+      <Filter>Src\Application\Game\Shooting</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -280,6 +283,9 @@
     </ClCompile>
     <ClCompile Include="Src\System\Math\KdCollision.cpp">
       <Filter>Src\System\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Game\Shooting\EffectObject.cpp">
+      <Filter>Src\Application\Game\Shooting</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
