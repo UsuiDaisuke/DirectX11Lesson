@@ -2,7 +2,14 @@
 
 using namespace DirectX;
 
-bool KdRayToMesh(const XMVECTOR& rRayPos, const XMVECTOR& rRayDir, float maxDistance, const KdMesh& rMesh, const KdMatrix& rMatrix)
+bool KdRayToMesh(
+	const XMVECTOR& rRayPos, 
+	const XMVECTOR& rRayDir, 
+	float maxDistance, 
+	const KdMesh& rMesh, 
+	const KdMatrix& rMatrix,
+	KdRayResult& rResult
+)
 {
 	//モデルの逆行列でレイを変換
 	XMMATRIX invMat = XMMatrixInverse(0, rMatrix);
@@ -16,7 +23,9 @@ bool KdRayToMesh(const XMVECTOR& rRayPos, const XMVECTOR& rRayDir, float maxDist
 	//逆行列に拡縮が入っていると
 	//レイが当たった距離にも拡縮を反映されてしまうので
 	//判定用の最大距離にも拡縮を反映させておく
-	float rayCheckRange = maxDistance * XMVector3Length(rayDir).m128_f32[0];
+
+	float dirLength = XMVector3Length(rayDir).m128_f32[0];
+	float rayCheckRange = maxDistance * dirLength;
 
 	rayDir = XMVector3Normalize(rayDir);
 
@@ -36,6 +45,10 @@ bool KdRayToMesh(const XMVECTOR& rRayPos, const XMVECTOR& rRayDir, float maxDist
 	// ナローフェイズ
 	//  レイ vs 全ての面
 	//--------------------------------------------------
+
+	bool ret = false;				//当たったかどうか
+	float closestDist = FLT_MAX;	//当たった面との距離
+
 	// 面情報の取得
 	const KdMeshFace* pFaces = &rMesh.GetFaces()[0];
 	UINT faceNum = rMesh.GetFaces().size();
@@ -66,9 +79,18 @@ bool KdRayToMesh(const XMVECTOR& rRayPos, const XMVECTOR& rRayDir, float maxDist
 		// 最大距離以内か
 		if (triDist <= rayCheckRange)
 		{
-			return true;
+			ret = true;//当たったとする
+
+			triDist /= dirLength;
+
+			if (triDist < closestDist)
+			{
+				closestDist = triDist;
+			}
 		}
 	}
 
-	return false;
+	rResult.m_distance = closestDist;
+	rResult.m_hit = ret;
+	return ret;
 }

@@ -119,6 +119,8 @@ void Missile::UpdateCollision()
 
 	rayInfo.m_dir.Normalize();
 
+	KdRayResult rayResult;
+
 	for (auto& obj : Scene::GetInstance().GetObjects())
 	{
 		// 自分自身を無視
@@ -138,7 +140,7 @@ void Missile::UpdateCollision()
 		//TAG_StageObjectとはレイ判定を行う
 		if (obj->GetTag() & TAG_StageObject)
 		{
-			if (obj->HitCheckByRay(rayInfo))
+			if (obj->HitCheckByRay(rayInfo, rayResult))
 			{
 				isHit = true;
 			}

@@ -216,6 +216,8 @@ void Aircraft::UpdateCollision()
 
 	rayInfo.m_dir.Normalize();
 
+	KdRayResult rayResult;
+
 	for (auto& obj : Scene::GetInstance().GetObjects())
 	{
 		// 自分自身は無視
@@ -225,7 +227,7 @@ void Aircraft::UpdateCollision()
 		if (!(obj->GetTag() & TAG_StageObject)) { continue; }
 
 		// 判定実行
-		if (obj->HitCheckByRay(rayInfo))
+		if (obj->HitCheckByRay(rayInfo, rayResult))
 		{
 			// 移動する前のフレームに戻る
 			m_mWorld.SetTranslation(m_prevPos);

@@ -52,7 +52,7 @@ public:
 	std::shared_ptr<CameraComponent> getCameraComponent() { return m_spCameraComponent; }
 
 	bool HitCheckBySphere(const SphereInfo& rInfo);
-	bool HitCheckByRay(const RayInfo& rInfo);
+	bool HitCheckByRay(const RayInfo& rInfo, KdRayResult& rResult);
 
 protected:
 

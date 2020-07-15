@@ -339,11 +339,11 @@ double                    JsonValue::number_value()              const { return 
 int                       JsonValue::int_value()                 const { return 0; }
 bool                      JsonValue::bool_value()                const { return false; }
 const string &            JsonValue::string_value()              const { return statics().empty_string; }
-	  string &            JsonValue::string_value()                    { return g_empty_string; }
+	  string &            JsonValue::string_value()                    { g_empty_string = ""; return g_empty_string; }
 const vector<Json> &	  JsonValue::array_items()               const { return statics().empty_vector; }
-	  vector<Json> &      JsonValue::array_items()                     { return g_empty_vector; }
+	  vector<Json> &      JsonValue::array_items()                     { g_empty_vector.clear(); return g_empty_vector; }
 const map<string, Json> & JsonValue::object_items()              const { return statics().empty_map; }
-	  map<string, Json> & JsonValue::object_items()                    { return g_empty_map; }
+	  map<string, Json> & JsonValue::object_items()                    { g_empty_map.clear(); return g_empty_map; }
 const Json &              JsonValue::operator[] (size_t)         const { return static_null(); }
       Json &              JsonValue::operator[] (size_t)               { assert(0 && "この型では呼べませんよ"); return Json()/*_static_null()*/; }
 const Json &              JsonValue::operator[] (const string &) const { return static_null(); }
