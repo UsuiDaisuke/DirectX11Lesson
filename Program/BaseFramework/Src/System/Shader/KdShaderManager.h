@@ -91,6 +91,12 @@ public:
 	ID3D11DepthStencilState* m_ds_ZEnable_ZWriteEnable = nullptr;
 	ID3D11DepthStencilState* m_ds_ZDisable_ZWriteDisable = nullptr;
 
+	ID3D11DepthStencilState* m_ds_ZEnable_ZWriteDisable = nullptr;
+
+	//ラスタライズステート
+	ID3D11RasterizerState* m_rs_CullBack = nullptr;
+	ID3D11RasterizerState* m_rs_CullNone = nullptr;
+
 	//==========================
 	//
 	// その他

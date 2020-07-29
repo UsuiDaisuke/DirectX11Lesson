@@ -183,17 +183,25 @@ void Scene::Draw()
 	SHADER.m_effectShader.SetToDevice();
 	SHADER.m_effectShader.SetTexture(D3D.GetWhiteTex()->GetSRView());
 
-	KdMatrix tempMat;
-	tempMat.SetTranslation({ 0.0f, 5.0f, 0.0f });
+	{//ポリゴンの描画
+		D3D.GetDevContext()->OMSetDepthStencilState(SHADER.m_ds_ZEnable_ZWriteDisable, 0);
+		D3D.GetDevContext()->RSSetState(SHADER.m_rs_CullNone);
 
-	SHADER.m_effectShader.SetWorldMatrix(tempMat);
-	SHADER.m_effectShader.WriteToCB();
-	m_poly.Draw(0);
+		KdMatrix tempMat;
+		tempMat.SetTranslation({ 0.0f, 5.0f, 0.0f });
 
-	tempMat.SetTranslation({ 5.0f, 10.0f, 1.0f });
-	SHADER.m_effectShader.SetWorldMatrix(tempMat);
-	SHADER.m_effectShader.WriteToCB();
-	m_poly.Draw(0);
+		SHADER.m_effectShader.SetWorldMatrix(tempMat);
+		SHADER.m_effectShader.WriteToCB();
+		m_poly.Draw(0);
+
+		tempMat.SetTranslation({ 5.0f, 10.0f, 1.0f });
+		SHADER.m_effectShader.SetWorldMatrix(tempMat);
+		SHADER.m_effectShader.WriteToCB();
+		m_poly.Draw(0);
+
+		D3D.GetDevContext()->OMSetDepthStencilState(SHADER.m_ds_ZEnable_ZWriteEnable, 0);
+		D3D.GetDevContext()->RSSetState(SHADER.m_rs_CullBack);
+	}
 
 	// デバッグライン描画
 	SHADER.m_effectShader.SetToDevice();
