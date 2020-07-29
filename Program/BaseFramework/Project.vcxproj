@@ -170,6 +170,7 @@
     <ClInclude Include="src\System\Direct3D\KdBuffer.h" />
     <ClInclude Include="src\System\Direct3D\KdMesh.h" />
     <ClInclude Include="Src\System\Direct3D\kdModel.h" />
+    <ClInclude Include="Src\System\Direct3D\KdSquarePolygon.h" />
     <ClInclude Include="src\System\Direct3D\KdTexture.h" />
     <ClInclude Include="src\Pch.h" />
     <ClInclude Include="Src\System\Math\KdCollision.h" />
@@ -207,6 +208,7 @@
     <ClCompile Include="src\System\Direct3D\KdBuffer.cpp" />
     <ClCompile Include="src\System\Direct3D\KdMesh.cpp" />
     <ClCompile Include="Src\System\Direct3D\kdModel.cpp" />
+    <ClCompile Include="Src\System\Direct3D\KdSquarePolygon.cpp" />
     <ClCompile Include="src\System\Direct3D\KdTexture.cpp" />
     <ClCompile Include="src\Pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

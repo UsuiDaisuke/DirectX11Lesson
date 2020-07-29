@@ -88,6 +88,9 @@ void Scene::Init()
 
 void Scene::Deserialize()
 {
+	m_poly.Init(10.0f, 10.0f, { 1,1,1,1 });
+	m_poly.SetTexture(KdResFac.GetTexture("Data/Texture/Explosion00.png"));
+
 	LoadScene("Data/Scene/ShootingGame.json");
 }
 
@@ -171,12 +174,26 @@ void Scene::Draw()
 	//不透明物描画
 	SHADER.m_standardShader.SetToDevice();
 
-	
-
 	for (auto pObjects : m_spObjects)
 	{
 		pObjects->Draw();
 	}
+
+	//半透明物描画
+	SHADER.m_effectShader.SetToDevice();
+	SHADER.m_effectShader.SetTexture(D3D.GetWhiteTex()->GetSRView());
+
+	KdMatrix tempMat;
+	tempMat.SetTranslation({ 0.0f, 5.0f, 0.0f });
+
+	SHADER.m_effectShader.SetWorldMatrix(tempMat);
+	SHADER.m_effectShader.WriteToCB();
+	m_poly.Draw(0);
+
+	tempMat.SetTranslation({ 5.0f, 10.0f, 1.0f });
+	SHADER.m_effectShader.SetWorldMatrix(tempMat);
+	SHADER.m_effectShader.WriteToCB();
+	m_poly.Draw(0);
 
 	// デバッグライン描画
 	SHADER.m_effectShader.SetToDevice();

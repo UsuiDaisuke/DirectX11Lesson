@@ -25,6 +25,9 @@
 // モデル
 #include "Direct3D/kdModel.h"
 
+// 板ポリゴン
+#include "Direct3D/KdSquarePolygon.h"
+
 // 判定系
 #include "Math/KdCollision.h"
 
