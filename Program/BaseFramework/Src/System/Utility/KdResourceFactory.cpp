@@ -26,6 +26,32 @@ std::shared_ptr<KdModel> KdResourceFactory::GetModel(const std::string& filename
 	}
 }
 
+std::shared_ptr<KdTexture> KdResourceFactory::GetTexture(const std::string& filename)
+{
+	//filenameのテクスチャがあるか？
+	auto itFound = m_texMap.find(filename);
+	//ない場合
+	if (itFound == m_texMap.end())
+	{
+		//生成 & 読み込み
+		auto newTexture = std::make_shared<KdTexture>();
+		if (newTexture->Load(filename) == false)
+		{
+			//読み込み失敗時は、nullを返す
+			return nullptr;
+		}
+		// リスト(map)に登録
+		m_texMap[filename] = newTexture;
+		// リソースを返す
+		return newTexture;
+	}
+	//ある場合
+	else
+	{
+		return (*itFound).second;
+	}
+}
+
 json11::Json KdResourceFactory::GetJSON(const std::string& filename)
 {
 	// filenameの物があるか？(検索)
