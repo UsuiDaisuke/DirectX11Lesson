@@ -17,7 +17,25 @@ public:
 		m_texture = tex;
 	}
 
+	// アニメーション分割数の設定
+	inline void SetAnimationInfo(int splitX, int splitY)
+	{
+		m_animSplitX = splitX;
+		m_animSplitY = splitY;
+	}
+
+	// 分割設定と渡されたコマ数をもとにUV座標の計算
+	void SetAnimationPos(float no);
+	void Animation(float speed, bool loop);
+	bool IsAnimationEnd();
+
 private:
+
+	// アニメーション関連
+	int m_animSplitX = 1;	// 横の分割数
+	int m_animSplitY = 1;	// 縦の分割数
+
+	float m_animPos = 0;	// 現在のコマ市
 
 	struct Vertex
 	{

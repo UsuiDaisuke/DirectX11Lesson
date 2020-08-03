@@ -91,6 +91,8 @@ void Scene::Deserialize()
 	m_poly.Init(10.0f, 10.0f, { 1,1,1,1 });
 	m_poly.SetTexture(KdResFac.GetTexture("Data/Texture/Explosion00.png"));
 
+	m_poly.SetAnimationInfo(5, 5);	// アニメーション情報
+
 	LoadScene("Data/Scene/ShootingGame.json");
 }
 
@@ -135,6 +137,8 @@ void Scene::Update()
 			++spObjectItr;
 		}
 	}
+
+	m_poly.Animation(0.5f, true);
 }
 
 void Scene::Draw()

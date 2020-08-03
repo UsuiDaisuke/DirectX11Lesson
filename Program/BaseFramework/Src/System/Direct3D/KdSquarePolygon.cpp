@@ -35,3 +35,44 @@ void KdSquarePolygon::Draw(int setTextureNo)
 	//指定した頂点配列を描画
 	D3D.DrawVertices(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP, 4, &m_vertex, sizeof(Vertex));
 }
+
+void KdSquarePolygon::SetAnimationPos(float no)
+{
+	int x = (int)no % m_animSplitX;
+	int y = (int)no / m_animSplitX;
+
+	float w = 1.0f / m_animSplitX;
+	float h = 1.0f / m_animSplitY;
+
+	m_vertex[0].UV = { x * w		, (y + 1) * h };
+	m_vertex[1].UV = { x * w		,		y * h };
+	m_vertex[2].UV = { (x + 1) * w	, (y + 1) * h };
+	m_vertex[3].UV = { (x + 1) * w	,		y * h };
+
+	m_animPos = no;
+}
+
+void KdSquarePolygon::Animation(float speed, bool loop)
+{
+	m_animPos += speed;
+	if (m_animPos >= (m_animSplitX * m_animSplitY))
+	{
+		if (loop)
+		{
+			m_animPos = 0;
+		}
+		else
+		{
+			m_animPos = (float)(m_animSplitX * m_animSplitY) - 1;
+		}
+	}
+	SetAnimationPos(m_animPos);
+}
+
+bool KdSquarePolygon::IsAnimationEnd()
+{
+	// 終了判定
+	if (m_animPos >= (m_animSplitX * m_animSplitY) - 1) { return true; }
+
+	return false;
+}
