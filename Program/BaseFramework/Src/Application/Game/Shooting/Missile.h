@@ -13,6 +13,8 @@ public:
 	void UpdateCollision();
 	inline void SetOwner(const std::shared_ptr<GameObject>& spOwner) { m_wpOwner = spOwner; }
 
+	void Explosion();
+
 private:
 
 	KdVec3		m_prevPos;

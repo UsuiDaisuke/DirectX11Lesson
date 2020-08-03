@@ -162,6 +162,7 @@
     <ClInclude Include="Src\Application\Game\GameObject.h" />
     <ClInclude Include="Src\Application\Game\Scene.h" />
     <ClInclude Include="Src\Application\Game\Shooting\Aircraft.h" />
+    <ClInclude Include="Src\Application\Game\Shooting\AnimationEffect.h" />
     <ClInclude Include="Src\Application\Game\Shooting\EffectObject.h" />
     <ClInclude Include="Src\Application\Game\Shooting\Missile.h" />
     <ClInclude Include="Src\Application\main.h" />
@@ -200,6 +201,7 @@
     <ClCompile Include="Src\Application\Game\GameObject.cpp" />
     <ClCompile Include="Src\Application\Game\Scene.cpp" />
     <ClCompile Include="Src\Application\Game\Shooting\Aircraft.cpp" />
+    <ClCompile Include="Src\Application\Game\Shooting\AnimationEffect.cpp" />
     <ClCompile Include="Src\Application\Game\Shooting\EffectObject.cpp" />
     <ClCompile Include="Src\Application\Game\Shooting\Missile.cpp" />
     <ClCompile Include="Src\Application\main.cpp" />

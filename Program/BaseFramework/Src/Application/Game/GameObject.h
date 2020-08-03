@@ -28,6 +28,9 @@ public:
 	virtual void Update();
 	virtual void Draw();
 
+	// 半透明物の描画
+	virtual void DrawEffect() {};
+
 	inline void SetMatrix(const KdMatrix& rMat)
 	{
 		m_mWorld = rMat;

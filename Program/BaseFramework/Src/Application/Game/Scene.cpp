@@ -5,6 +5,7 @@
 #include "EditorCamera.h"
 #include "Shooting/Aircraft.h"
 #include "Shooting/Missile.h"
+#include "Shooting/AnimationEffect.h"
 
 Scene::Scene()		//コンストラタ
 {
@@ -88,12 +89,11 @@ void Scene::Init()
 
 void Scene::Deserialize()
 {
-	m_poly.Init(10.0f, 10.0f, { 1,1,1,1 });
-	m_poly.SetTexture(KdResFac.GetTexture("Data/Texture/Explosion00.png"));
-
-	m_poly.SetAnimationInfo(5, 5);	// アニメーション情報
-
 	LoadScene("Data/Scene/ShootingGame.json");
+
+	std::shared_ptr<AnimationEffect> spExp = std::make_shared<AnimationEffect>();
+	spExp->SetAnimationInfo(KdResFac.GetTexture("Data/Texture/Explosion00.png"), 10.0f, 5, 5, 0.0f);
+	AddObject(spExp);
 }
 
 void Scene::Release()
@@ -137,8 +137,6 @@ void Scene::Update()
 			++spObjectItr;
 		}
 	}
-
-	m_poly.Animation(0.5f, true);
 }
 
 void Scene::Draw()
@@ -191,17 +189,10 @@ void Scene::Draw()
 		D3D.GetDevContext()->OMSetDepthStencilState(SHADER.m_ds_ZEnable_ZWriteDisable, 0);
 		D3D.GetDevContext()->RSSetState(SHADER.m_rs_CullNone);
 
-		KdMatrix tempMat;
-		tempMat.SetTranslation({ 0.0f, 5.0f, 0.0f });
-
-		SHADER.m_effectShader.SetWorldMatrix(tempMat);
-		SHADER.m_effectShader.WriteToCB();
-		m_poly.Draw(0);
-
-		tempMat.SetTranslation({ 5.0f, 10.0f, 1.0f });
-		SHADER.m_effectShader.SetWorldMatrix(tempMat);
-		SHADER.m_effectShader.WriteToCB();
-		m_poly.Draw(0);
+		for (auto spObj : m_spObjects)
+		{
+			spObj->DrawEffect();
+		}
 
 		D3D.GetDevContext()->OMSetDepthStencilState(SHADER.m_ds_ZEnable_ZWriteEnable, 0);
 		D3D.GetDevContext()->RSSetState(SHADER.m_rs_CullBack);

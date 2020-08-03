@@ -5,6 +5,7 @@
 #include"Aircraft.h"
 #include"EffectObject.h"
 #include"../../Component/ModelComponent.h"
+#include "AnimationEffect.h"
 
 void Missile::Deserialize(const json11::Json& jsonObj)
 {
@@ -146,20 +147,6 @@ void Missile::UpdateCollision()
 				if (aircraft)
 				{
 					aircraft->OnNotify_Damage(m_attackPow);
-
-					std::shared_ptr<EffectObject> effectObj = std::make_shared<EffectObject>();
-					if (effectObj)
-					{
-						//キャラクターのリストに爆発の追加
-						Scene::GetInstance().AddObject(effectObj);
-
-						KdVec3 hitPos(m_mWorld.GetTranslation());
-
-						// 爆発エフェクトの行列を計算
-						KdMatrix mMat;
-						mMat.CreateTranslation(hitPos.x, hitPos.y, hitPos.z);
-						effectObj->SetMatrix(mMat);
-					}
 				}
 			}
 		}
@@ -174,6 +161,27 @@ void Missile::UpdateCollision()
 		}
 
 		//当たったら
-		if(isHit)Destroy();
+		if (isHit) {
+			Explosion();
+			Destroy();
+		}
 	}
+}
+
+
+void Missile::Explosion()
+{
+	// アニメーションエフェクトをインスタンス化
+	std::shared_ptr<AnimationEffect> effect = std::make_shared<AnimationEffect>();
+
+	// 爆発のテクスチャとアニメーション情報を渡す
+	effect->SetAnimationInfo(
+		KdResFac.GetTexture("Data/Texture/Explosion00.png"), 10.0f, 5, 5, rand() % 360
+	);
+
+	// 爆発をミサイル(自分)の位置に合わせる
+	effect->SetMatrix(m_mWorld);
+
+	// リストに追加
+	Scene::GetInstance().AddObject(effect);
 }
