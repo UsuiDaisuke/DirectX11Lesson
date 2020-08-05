@@ -192,6 +192,9 @@
     <ClInclude Include="Src\Application\Game\Shooting\AnimationEffect.h">
       <Filter>Src\Application\Game\Shooting</Filter>
     </ClInclude>
+    <ClInclude Include="Src\System\Direct3D\KdTrailPolygon.h">
+      <Filter>Src\System\Direct3D</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -298,6 +301,9 @@
     </ClCompile>
     <ClCompile Include="Src\Application\Game\Shooting\AnimationEffect.cpp">
       <Filter>Src\Application\Game\Shooting</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\System\Direct3D\KdTrailPolygon.cpp">
+      <Filter>Src\System\Direct3D</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -27,6 +27,8 @@
 
 // 板ポリゴン
 #include "Direct3D/KdSquarePolygon.h"
+// 軌跡ポリゴン
+#include "Direct3D/KdTrailPolygon.h"
 
 // 判定系
 #include "Math/KdCollision.h"

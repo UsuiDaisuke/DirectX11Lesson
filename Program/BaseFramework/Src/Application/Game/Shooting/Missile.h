@@ -31,18 +31,7 @@ private:
 	int			m_attackPow = 5;
 
 	// 頂点形式
-	struct Vertex
-	{
-		Math::Vector3 Pos;
-		Math::Vector2 UV;
-		Math::Vector4 Color = { 1,1,1,1 };
-	};
-
-	// 軌道の位置などを記憶する行列配列
-	std::deque<Math::Matrix>	m_pointList;
-
-	// テクスチャ
-	std::shared_ptr<KdTexture>	m_texture;
+	KdTrailPolygon	m_trailSmoke;
 
 	float m_trailRotate = 0.0f;
 };
