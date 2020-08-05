@@ -23,6 +23,9 @@ void Missile::Deserialize(const json11::Json& jsonObj)
 	{
 		m_attackPow = jsonObj["Power"].int_value();
 	}
+
+	// 煙テクスチャ
+	m_texture = KdResFac.GetTexture("Data/Texture/smokeline2.png");
 }
 
 void Missile::Update()
@@ -98,6 +101,9 @@ void Missile::Update()
 	m_mWorld.Move(move);
 
 	UpdateCollision();
+
+	// 軌跡の更新
+	UpdateTrail();
 }
 
 void Missile::UpdateCollision()
@@ -184,4 +190,84 @@ void Missile::Explosion()
 
 	// リストに追加
 	Scene::GetInstance().AddObject(effect);
+}
+
+void Missile::UpdateTrail()
+{
+	m_trailRotate += 1.0f;
+
+	KdMatrix mTrail;
+	mTrail.RotateZ(m_trailRotate);
+	mTrail *= m_mWorld;
+
+	// 軌道座標を先頭に追加
+	m_pointList.push_front(mTrail);
+
+	// 軌道の数制限(100以前は消去する)
+	if (m_pointList.size() > 100)
+	{
+		m_pointList.pop_back();
+	}
+}
+
+void Missile::DrawEffect()
+{
+	if (!m_alive) { return; }
+
+	// ポイントが2つ以下の場合は描画不可
+	if (m_pointList.size() < 2) { return; }
+
+	// 軌道画像の分割数
+	float sliceCount = (float)(m_pointList.size() - 1);
+
+	// 頂点行列
+	std::vector<Vertex> vertex;
+	// ポイント数分のサイズ確保
+	vertex.resize(m_pointList.size() * 2);
+
+	// 横幅
+	float width = 0.5f;
+	
+	//------------------------------
+	// 頂点データ作成
+	//------------------------------
+	for (UINT i = 0; i < m_pointList.size(); i++)
+	{
+		// 登録行列の参照(ショートカット)
+		Math::Matrix& mat = m_pointList[i];
+
+		// 2つの頂点の参照(ショートカット)
+		Vertex& v1 = vertex[i * 2];
+		Vertex& v2 = vertex[i * 2 + 1];
+
+		// X方向
+		Math::Vector3 axisX = mat.Right();
+		axisX.Normalize();
+
+		// 座標
+		v1.Pos = mat.Translation() + axisX * width * 0.5f;
+		v2.Pos = mat.Translation() - axisX * width * 0.5f;
+
+		// UV
+		float uvY = i / sliceCount;
+		v1.UV = { 0, uvY };
+		v2.UV = { 1, uvY };
+	}
+
+	SHADER.m_effectShader.SetWorldMatrix(KdMatrix());
+
+	SHADER.m_effectShader.WriteToCB();
+
+	// テクスチャセット
+	if (m_texture)
+	{
+		D3D.GetDevContext()->PSSetShaderResources(0, 1, m_texture->GetSRViewAddress());
+	}
+	else
+	{
+		D3D.GetDevContext()->PSSetShaderResources(0, 1, D3D.GetWhiteTex()->GetSRViewAddress());
+	}
+
+	// 指定した頂点配列を描画する関数
+	D3D.DrawVertices(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP, vertex.size(), &vertex[0], sizeof(Vertex));
 }

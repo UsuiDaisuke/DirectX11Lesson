@@ -142,7 +142,13 @@ void Aircraft::UpdateShoot()
 			if (spMissile)
 			{
 				spMissile->Deserialize(KdResFac.GetJSON("Data/Scene/Missile.json"));
-				spMissile->SetMatrix(m_mWorld);
+
+				KdMatrix mLaunch;
+				mLaunch.CreateRotationX((rand() % 120 - 60.0f)* KdToRadians);
+				mLaunch.RotateY((rand() % 120 - 60.0f) * KdToRadians);
+				mLaunch *= m_mWorld;
+
+				spMissile->SetMatrix(mLaunch);
 
 				spMissile->SetOwner(shared_from_this());
 
