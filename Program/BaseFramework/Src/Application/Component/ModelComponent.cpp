@@ -8,6 +8,11 @@ void ModelComponent::Draw()
 	//モデルがないときはスキップ
 	if (m_spModel == nullptr) { return; }
 
-	SHADER.m_standardShader.SetWorldMatrix(m_owner.GetMatrix());
-	SHADER.m_standardShader.DrawMesh(m_spModel->GetMesh().get(), m_spModel->GetMaterials());
+	for (UINT i = 0; i < m_spModel->GetOriginalNodes().size(); i++)
+	{
+		auto& rNode = m_spModel->GetOriginalNodes()[i];
+		if (rNode.m_spMesh == nullptr) { continue; }
+		SHADER.m_standardShader.SetWorldMatrix(rNode.m_localTransform * m_owner.GetMatrix());
+		SHADER.m_standardShader.DrawMesh(rNode.m_spMesh.get(), m_spModel->GetMaterials());
+	}
 }

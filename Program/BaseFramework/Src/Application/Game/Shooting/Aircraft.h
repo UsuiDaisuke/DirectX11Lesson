@@ -25,8 +25,9 @@ private:
 
 	std::shared_ptr<GameObject> m_spPropeller;	// プロペラ用オブジェクト
 
-	// プロペラが飛行機本体からどれだけ離れているか
-	KdMatrix m_mPropLocal;
+	// // プロペラが飛行機本体からどれだけ離れているか
+	// KdMatrix m_mPropLocal;
+
 	float m_propRotSpeed;
 
 	float			m_speed = 0.2f;			// 移動スピード

@@ -170,7 +170,7 @@ void Scene::Draw()
 
 	// モデルの描画(メッシュの情報とマテリアルの情報を渡す)
 	if (m_spSky) {
-		SHADER.m_effectShader.DrawMesh(m_spSky->GetMesh().get(), m_spSky->GetMaterials());
+		SHADER.m_effectShader.DrawMesh(m_spSky->GetMesh(0).get(), m_spSky->GetMaterials());
 	}
 
 	//不透明物描画

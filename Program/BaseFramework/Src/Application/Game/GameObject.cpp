@@ -114,14 +114,28 @@ bool GameObject::HitCheckByRay(const RayInfo& rInfo, KdRayResult& rResult)
 	// 判定する対象のモデルがない場合は当たっていないとして帰る
 	if (!m_spModelComponent) { return false; }
 
-	return KdRayToMesh(
-		rInfo.m_pos,
-		rInfo.m_dir,
-		rInfo.m_maxRange,
-		*(m_spModelComponent)->GetMesh(),
-		m_mWorld,
-		rResult
-	);
+	for (auto& node : m_spModelComponent->GetModel()->GetOriginalNodes())
+	{
+		KdRayResult tmpResult;	//結果返送用
+
+		// レイ判定(本体からのずれ分も加味して計算)
+		KdRayToMesh(
+			rInfo.m_pos,
+			rInfo.m_dir,
+			rInfo.m_maxRange,
+			*(node.m_spMesh),
+			node.m_localTransform * m_mWorld,
+			tmpResult
+		);
+
+		// より近い判定を優先する
+		if (tmpResult.m_distance < rResult.m_distance)
+		{
+			rResult = tmpResult;
+		}
+	}
+
+	return rResult.m_hit;
 }
 
 void GameObject::Release()

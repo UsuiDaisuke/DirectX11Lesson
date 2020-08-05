@@ -14,7 +14,7 @@
       "ClassName": "Aircraft",
       "Name": "Enemy00",
       "Tag": 17,
-      "ModelFileName": "Data/Aircraft/Aircraft_body.gltf",
+      "ModelFileName": "Data/Aircraft/Aircraft_full.gltf",
       "Pos": [ 0, 5, 25 ],
       "Radius": 2.0
     },
@@ -22,7 +22,7 @@
       "ClassName": "Aircraft",
       "Name": "Enemy01",
       "Tag": 17,
-      "ModelFileName": "Data/Aircraft/Aircraft_body.gltf",
+      "ModelFileName": "Data/Aircraft/Aircraft_full.gltf",
       "Pos": [ -3, 10, 20 ],
       "Rot": [ 0, 45, 0 ],
       "Radius": 2.0
@@ -31,7 +31,7 @@
       "ClassName": "Aircraft",
       "Name": "Enemy02",
       "Tag": 17,
-      "ModelFileName": "Data/Aircraft/Aircraft_body.gltf",
+      "ModelFileName": "Data/Aircraft/Aircraft_full.gltf",
       "Pos": [ 3, 15, 20 ],
       "Rot": [ 0, -45, 0 ],
       "Radius": 2.0
