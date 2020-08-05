@@ -12,15 +12,22 @@ public:
 
 	void ImGuiUpdate(); //Aircraftクラス専用のImGui更新
 
-	void UpdateMove();	//移動の更新処理
-	void UpdateShoot();	//発射関数
-	void UpdateCollision();	//当たり判定処理
-
 	void Draw() override;	// 描画
 
 	void OnNotify_Damage(int damage);
 
 private:
+
+	void UpdateMove();	//移動の更新処理
+	void UpdateShoot();	//発射関数
+	void UpdateCollision();	//当たり判定処理
+	void UpdatePropeller();// プロペラ更新
+
+	std::shared_ptr<GameObject> m_spPropeller;	// プロペラ用オブジェクト
+
+	// プロペラが飛行機本体からどれだけ離れているか
+	KdMatrix m_mPropLocal;
+	float m_propRotSpeed;
 
 	float			m_speed = 0.2f;			// 移動スピード
 	bool			m_canShoot = true;		// 発射可能フラグ

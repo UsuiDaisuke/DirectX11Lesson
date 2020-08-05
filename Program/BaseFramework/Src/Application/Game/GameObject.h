@@ -52,7 +52,11 @@ public:
 	inline UINT GetTag() const{ return m_tag; }
 
 	//カメラコンポーネントの取得
-	std::shared_ptr<CameraComponent> getCameraComponent() { return m_spCameraComponent; }
+	std::shared_ptr<CameraComponent> GetCameraComponent() { return m_spCameraComponent; }
+	//入力コンポーネントの取得
+	std::shared_ptr<InputComponent> GetInputComponent() { return m_spInputComponent; }
+	//モデルコンポーネントの取得
+	std::shared_ptr<ModelComponent> GetModelComponent() { return m_spModelComponent; }
 
 	bool HitCheckBySphere(const SphereInfo& rInfo);
 	bool HitCheckByRay(const RayInfo& rInfo, KdRayResult& rResult);

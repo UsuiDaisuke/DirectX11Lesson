@@ -35,6 +35,17 @@ void Aircraft::Deserialize(const json11::Json& jsonObj)
 	}
 
 	m_spActionState = std::make_shared<ActionFly>();
+
+	m_spPropeller = std::make_shared<GameObject>();
+	if (m_spPropeller && m_spPropeller->GetModelComponent())
+	{
+		// モデル読み込み
+		m_spPropeller->GetModelComponent()->SetModel(KdResFac.GetModel("Data/Aircraft/Propeller.gltf"));
+
+		m_mPropLocal.CreateTranslation(0.0f, 0.0f, 2.85f);
+
+		m_propRotSpeed = 0.3f;
+	}
 }
 
 void Aircraft::Update()
@@ -55,6 +66,8 @@ void Aircraft::Update()
 	{
 		m_spCameraComponent->SetCameraMatrix(m_mWorld);
 	}
+
+	UpdatePropeller();
 }
 
 void Aircraft::ImGuiUpdate()
@@ -297,9 +310,24 @@ void Aircraft::UpdateCollision()
 	}
 }
 
+void Aircraft::UpdatePropeller()
+{
+	if (!m_spPropeller) { return; }
+
+	// ズレ分 * 本体の位置
+	m_spPropeller->SetMatrix(m_mPropLocal * m_mWorld);
+
+	m_mPropLocal.RotateZ(m_propRotSpeed);
+}
+
 void Aircraft::Draw()
 {
 	GameObject::Draw();
+
+	if (m_spPropeller)
+	{
+		m_spPropeller->Draw();
+	}
 
 	// レーザー描画
 	if (m_laser)
