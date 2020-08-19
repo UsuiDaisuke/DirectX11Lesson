@@ -23,11 +23,6 @@ void Aircraft::Deserialize(const json11::Json& jsonObj)
 		//プレイヤー入力
 		m_spInputComponent = std::make_shared<PlayerInputComponent>(*this);
 
-		KdModel::Node* propNode = m_spModelComponent->FindNode("propeller");
-		if (propNode)
-		{
-			propNode->m_localTransform.CreateTranslation(0.0f, 0.0f, 10.0f);
-		}
 		m_propRotSpeed = 0.3f;
 	}
 	else
@@ -43,16 +38,7 @@ void Aircraft::Deserialize(const json11::Json& jsonObj)
 
 	m_spActionState = std::make_shared<ActionFly>();
 
-	//m_spPropeller = std::make_shared<GameObject>();
-	//if (m_spPropeller && m_spPropeller->GetModelComponent())
-	//{
-	//	// モデル読み込み
-	//	m_spPropeller->GetModelComponent()->SetModel(KdResFac.GetModel("Data/Aircraft/Propeller.gltf"));
-
-	//	m_mPropLocal.CreateTranslation(0.0f, 0.0f, 2.85f);
-
-	//	m_propRotSpeed = 0.3f;
-	//}
+	m_propTrail.SetTexture(KdResFac.GetInstance().GetTexture("Data/Texture/sabelline.png"));
 }
 
 void Aircraft::Update()
@@ -323,6 +309,22 @@ void Aircraft::UpdatePropeller()
 	if (propNode)
 	{
 		propNode->m_localTransform.RotateZ(m_propRotSpeed);
+
+		KdMatrix propCenterMat;
+		propCenterMat *= propNode->m_localTransform * m_mWorld;
+		
+		KdMatrix propOuterMat;
+		propOuterMat.CreateTranslation(0.0f, 1.8f, 0.0f);
+		propOuterMat *= propCenterMat;
+
+		m_propTrail.AddPoint(propCenterMat);
+		m_propTrail.AddPoint(propOuterMat);
+
+		if (m_propTrail.GetNumPoints() > 30)
+		{
+			m_propTrail.DelPoint_Back();
+			m_propTrail.DelPoint_Back();
+		}
 	}
 }
 
@@ -360,6 +362,18 @@ void Aircraft::OnNotify_Damage(int damage)
 	{
 		m_spActionState = std::make_shared<ActionCrash>();
 	}
+}
+
+void Aircraft::DrawEffect()
+{
+	D3D.GetDevContext()->OMSetBlendState(SHADER.m_bs_Add, Math::Color(0, 0, 0, 0), 0xFFFFFFFF);
+
+	SHADER.m_effectShader.SetWorldMatrix(KdMatrix());
+	SHADER.m_effectShader.WriteToCB();
+
+	m_propTrail.DrawStrip();
+
+	D3D.GetDevContext()->OMSetBlendState(SHADER.m_bs_Alpha, Math::Color(0, 0, 0, 0), 0xFFFFFFFF);
 }
 
 void Aircraft::ActionFly::Update(Aircraft& owner)

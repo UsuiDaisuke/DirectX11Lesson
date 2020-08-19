@@ -39,6 +39,9 @@ public:
 
 	void DrawBillboard(float width);
 
+	//頂点情報をつなげてそのまま描画
+	void DrawStrip();
+
 private:
 
 	float m_trailRotate = 0.0f;

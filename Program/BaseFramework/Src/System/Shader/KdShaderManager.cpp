@@ -54,6 +54,10 @@ void KdShaderManager::Init()
 	m_rs_CullBack = D3D.CreateRasterizerState(D3D11_CULL_BACK, D3D11_FILL_SOLID, true, false);
 	m_rs_CullNone = D3D.CreateRasterizerState(D3D11_CULL_NONE, D3D11_FILL_SOLID, true, false);
 
+	// ブレンドステート作成
+	m_bs_Alpha = D3D.CreateBlendState(KdBlendMode::Alpha);
+	m_bs_Add = D3D.CreateBlendState(KdBlendMode::Add);
+	
 }
 
 void KdShaderManager::Release()
@@ -68,9 +72,13 @@ void KdShaderManager::Release()
 	// 深度ステンシルステート解放
 	KdSafeRelease(m_ds_ZEnable_ZWriteEnable);
 	KdSafeRelease(m_ds_ZDisable_ZWriteDisable);
-
 	KdSafeRelease(m_ds_ZEnable_ZWriteDisable);
 
+	// ラスタライザステート解放
 	KdSafeRelease(m_rs_CullBack);
 	KdSafeRelease(m_rs_CullNone);
+
+	// ブレンドステート解放
+	KdSafeRelease(m_bs_Alpha);
+	KdSafeRelease(m_bs_Add);
 }

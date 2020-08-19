@@ -16,6 +16,8 @@ public:
 
 	void OnNotify_Damage(int damage);
 
+	void DrawEffect()override;
+
 private:
 
 	void UpdateMove();	//移動の更新処理
@@ -29,6 +31,7 @@ private:
 	// KdMatrix m_mPropLocal;
 
 	float m_propRotSpeed;
+	KdTrailPolygon m_propTrail;
 
 	float			m_speed = 0.2f;			// 移動スピード
 	bool			m_canShoot = true;		// 発射可能フラグ
