@@ -114,7 +114,7 @@ bool GameObject::HitCheckByRay(const RayInfo& rInfo, KdRayResult& rResult)
 	// 判定する対象のモデルがない場合は当たっていないとして帰る
 	if (!m_spModelComponent) { return false; }
 
-	for (auto& node : m_spModelComponent->GetModel()->GetOriginalNodes())
+	for (auto& node : m_spModelComponent->GetNodes())
 	{
 		KdRayResult tmpResult;	//結果返送用
 

@@ -23,6 +23,15 @@ public:
 		std::shared_ptr<KdMesh>	m_spMesh;
 	};
 
+	inline Node* FindNode(const std::string& name)
+	{
+		for (auto&& node : m_originalNodes)
+		{
+			if (node.m_name == name) { return &node; }
+		}
+		return nullptr;
+	}
+
 	const std::vector<Node>& GetOriginalNodes() const { return m_originalNodes; }
 
 private:

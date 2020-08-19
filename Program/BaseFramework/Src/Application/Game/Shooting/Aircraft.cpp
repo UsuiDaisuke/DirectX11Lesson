@@ -22,6 +22,13 @@ void Aircraft::Deserialize(const json11::Json& jsonObj)
 
 		//プレイヤー入力
 		m_spInputComponent = std::make_shared<PlayerInputComponent>(*this);
+
+		KdModel::Node* propNode = m_spModelComponent->FindNode("propeller");
+		if (propNode)
+		{
+			propNode->m_localTransform.CreateTranslation(0.0f, 0.0f, 10.0f);
+		}
+		m_propRotSpeed = 0.3f;
 	}
 	else
 	{
@@ -312,12 +319,11 @@ void Aircraft::UpdateCollision()
 
 void Aircraft::UpdatePropeller()
 {
-	//if (!m_spPropeller) { return; }
-
-	//// ズレ分 * 本体の位置
-	//m_spPropeller->SetMatrix(m_mPropLocal * m_mWorld);
-
-	//m_mPropLocal.RotateZ(m_propRotSpeed);
+	KdModel::Node* propNode = m_spModelComponent->FindNode("propeller");
+	if (propNode)
+	{
+		propNode->m_localTransform.RotateZ(m_propRotSpeed);
+	}
 }
 
 void Aircraft::Draw()
