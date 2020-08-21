@@ -36,6 +36,8 @@ void Aircraft::Deserialize(const json11::Json& jsonObj)
 		m_attackPow = jsonObj["Power"].int_value();
 	}
 
+	m_velocity = { 0.0f ,0.0f ,0.0f };
+
 	m_spActionState = std::make_shared<ActionFly>();
 
 	m_propTrail.SetTexture(KdResFac.GetInstance().GetTexture("Data/Texture/sabelline.png"));
@@ -100,17 +102,15 @@ void Aircraft::UpdateMove()
 
 	//移動角度補正
 	move *= m_speed;
+	m_velocity = m_velocity * 0.9;
+	m_velocity = m_velocity + (move * 0.2);
 
-	/*
-	m_mWorld._41 += move.x;
-	m_mWorld._42 += move.y;
-	m_mWorld._43 += move.z;
-	*/
+	m_propRotSpeed = m_velocity.z;
 
 	//移動行列作成
 	//Math::Matrix moveMat = DirectX::XMMatrixTranslation(move.x, move.y, move.z);
 	KdMatrix moveMat;
-	moveMat.CreateTranslation(move.x, move.y, move.z);
+	moveMat.CreateTranslation(m_velocity.x, m_velocity.y, m_velocity.z);
 
 	//ワールド行列に合成
 	//m_mWorld = DirectX::XMMatrixMultiply(moveMat, m_mWorld);
