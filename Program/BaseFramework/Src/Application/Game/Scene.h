@@ -51,9 +51,22 @@ private:
 
 	std::list<std::shared_ptr<GameObject>> m_spObjects;
 
+	std::weak_ptr<GameObject> m_wpImguiSelectObj;
+
 	//ターゲットのカメラ
 	std::weak_ptr<CameraComponent> m_wpTargetCamera;
 
 	// デバッグライン描画用の頂点配列
 	std::vector<KdEffectShader::Vertex> m_debugLines;
+
+	enum pauseState
+	{
+		PAUSE_OFF_DOWN,			// ポーズしてない
+		PAUSE_OFF_KEEP,			// ポーズしてない
+		PAUSE_OFF_ONE_FRAME,	// 1フレームだけ動く
+		PAUSE_ON_DOWN,			// ポーズしてる
+		PAUSE_ON_KEEP,			// ポーズしてる
+	};
+
+	pauseState pauseFlag = PAUSE_OFF_KEEP;
 };

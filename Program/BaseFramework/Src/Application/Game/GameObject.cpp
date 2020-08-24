@@ -84,6 +84,22 @@ void GameObject::Draw()
 	m_spModelComponent->Draw();
 }
 
+void GameObject::ImGuiUpdate()
+{
+	ImGui::InputText("Name", &m_name);
+
+	KdVec3 pos = m_mWorld.GetTranslation();
+
+	bool isChange = false;
+
+	isChange |= ImGui::DragFloat3("Position", &pos.x, 0.01f);
+
+	if (isChange)
+	{
+		m_mWorld.SetTranslation(pos);
+	}
+}
+
 //球による当たり判定(距離判定)
 bool GameObject::HitCheckBySphere(const SphereInfo& rInfo)
 {

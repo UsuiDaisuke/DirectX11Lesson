@@ -65,28 +65,6 @@ void Aircraft::Update()
 	UpdatePropeller();
 }
 
-void Aircraft::ImGuiUpdate()
-{
-	if (ImGui::TreeNodeEx("Aircraft", ImGuiTreeNodeFlags_DefaultOpen))
-	{
-		KdVec3 pos;
-		pos = m_mWorld.GetTranslation();
-
-		//ImGui::Text("Position [x:%.2f] [y:%.2f] [z:%.2f]", pos.x, pos.y, pos.z);
-
-		if (ImGui::DragFloat3("Position", &pos.x, 0.01f))
-		{
-			KdMatrix mTrans;
-			mTrans.CreateTranslation(pos.x, pos.y, pos.z);
-
-			//m_mWorld = mTrans;
-			m_mWorld.SetTranslation(mTrans.GetTranslation());
-		}
-
-		ImGui::TreePop();
-	}
-}
-
 void Aircraft::UpdateMove()
 {
 	if (m_spInputComponent == nullptr)

@@ -31,6 +31,8 @@ public:
 	// 半透明物の描画
 	virtual void DrawEffect() {};
 
+	virtual void ImGuiUpdate();
+
 	inline void SetMatrix(const KdMatrix& rMat)
 	{
 		m_mWorld = rMat;
@@ -50,6 +52,7 @@ public:
 
 	inline void SetTag(UINT tag) { m_tag = tag; }
 	inline UINT GetTag() const{ return m_tag; }
+	inline const char* GetName() const { return m_name.c_str(); }
 
 	//カメラコンポーネントの取得
 	std::shared_ptr<CameraComponent> GetCameraComponent() { return m_spCameraComponent; }

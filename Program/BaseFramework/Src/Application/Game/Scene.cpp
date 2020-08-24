@@ -30,7 +30,7 @@ void Scene::Init()
 	std::string err;
 	json11::Json jsonObj = json11::Json::parse(strJson, err);
 	if (err.size() > 0) { assert(0 && "読み込んだファイルのJson変換に失敗"); }
-	
+
 	//値アクセス
 	{
 		OutputDebugStringA(jsonObj["Name"].string_value().append("\n").c_str());
@@ -107,7 +107,7 @@ void Scene::Release()
 	{
 		m_spCamera.reset();
 	}
-	
+
 	m_spObjects.clear();
 }
 
@@ -120,21 +120,27 @@ void Scene::Update()
 		}
 	}
 
-	for (auto pObjects : m_spObjects)
+	if (pauseFlag < PAUSE_ON_DOWN)
 	{
-		pObjects->Update();
-	}
+		auto selectObject = m_wpImguiSelectObj.lock();
 
-	for (auto spObjectItr = m_spObjects.begin(); spObjectItr != m_spObjects.end();)
-	{
-		//寿命が尽きていたらリストから除外
-		if ((*spObjectItr)->IsAlive() == false)
+		for (auto pObjects : m_spObjects)
 		{
-			spObjectItr = m_spObjects.erase(spObjectItr);
+			if (pObjects == selectObject) { continue; }
+			pObjects->Update();
 		}
-		else
+
+		for (auto spObjectItr = m_spObjects.begin(); spObjectItr != m_spObjects.end();)
 		{
-			++spObjectItr;
+			//寿命が尽きていたらリストから除外
+			if ((*spObjectItr)->IsAlive() == false)
+			{
+				spObjectItr = m_spObjects.erase(spObjectItr);
+			}
+			else
+			{
+				++spObjectItr;
+			}
 		}
 	}
 }
@@ -148,7 +154,7 @@ void Scene::Draw()
 			m_spCamera->SetToShader();
 		}
 	}
-	else 
+	else
 	{
 		std::shared_ptr<CameraComponent> spCamera = m_wpTargetCamera.lock();
 		if (spCamera)
@@ -275,6 +281,35 @@ void Scene::ImGuiUpdate()
 
 		ImGui::Checkbox("EditorCamera", &m_editorCameraEnable);
 
+		if (ImGui::CollapsingHeader("Object List", ImGuiTreeNodeFlags_DefaultOpen))
+		{
+			for (auto&& rObj : m_spObjects)
+			{
+				// 選択したものかどうかを判断する
+				bool selected = (rObj == m_wpImguiSelectObj.lock());
+
+				ImGui::PushID(rObj.get());
+
+				if (ImGui::Selectable(rObj->GetName(), selected))
+				{
+					m_wpImguiSelectObj = rObj;
+				}
+
+				ImGui::PopID();
+			}
+		}
+	}
+	ImGui::End();
+
+	// インスペクターウィンド
+	if (ImGui::Begin("Inspector"))
+	{
+		auto selectObject = m_wpImguiSelectObj.lock();
+
+		if (selectObject)
+		{
+			selectObject->ImGuiUpdate();
+		}
 	}
 	ImGui::End();
 }
