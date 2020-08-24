@@ -10,8 +10,6 @@ public:
 	void Deserialize(const json11::Json& jsonObj) override;	// 初期化:オブジェクト精製用の外部データの解釈
 	void Update();		// 更新
 
-	void ImGuiUpdate(); //Aircraftクラス専用のImGui更新
-
 	void Draw() override;	// 描画
 
 	void OnNotify_Damage(int damage);

@@ -88,15 +88,54 @@ void GameObject::ImGuiUpdate()
 {
 	ImGui::InputText("Name", &m_name);
 
-	KdVec3 pos = m_mWorld.GetTranslation();
-
-	bool isChange = false;
-
-	isChange |= ImGui::DragFloat3("Position", &pos.x, 0.01f);
-
-	if (isChange)
+	if (ImGui::TreeNodeEx("Tag", ImGuiTreeNodeFlags_DefaultOpen))
 	{
-		m_mWorld.SetTranslation(pos);
+		ImGui::CheckboxFlags("Character", &m_tag, TAG_Character);
+		ImGui::CheckboxFlags("Player", &m_tag, TAG_Player);
+		ImGui::CheckboxFlags("StageObject", &m_tag, TAG_StageObject);
+		ImGui::CheckboxFlags("AttackHit", &m_tag, TAG_AttackHit);
+
+		if (ImGui::Button(u8"JSONテキストコピー"))
+		{
+			ImGui::SetClipboardText(KdFormat("\"Tag\" : %d", m_tag).c_str());
+		}
+
+		ImGui::TreePop();
+	}
+
+	if (ImGui::TreeNodeEx("Transform", ImGuiTreeNodeFlags_DefaultOpen))
+	{
+		KdVec3 pos = m_mWorld.GetTranslation();
+		KdVec3 rot = m_mWorld.GetAngles() * KdToDegrees;
+
+		bool isChange = false;
+
+		isChange |= ImGui::DragFloat3("Position", &pos.x, 0.01f);
+		isChange |= ImGui::DragFloat3("Rotation", &rot.x, 0.1f);
+
+		if (isChange)
+		{
+			rot *= KdToRadians;
+
+			KdMatrix mR;
+			mR.RotateX(rot.x);
+			mR.RotateY(rot.y);
+			mR.RotateZ(rot.z);
+
+			m_mWorld = mR;
+
+			m_mWorld.SetTranslation(pos);
+		}
+
+		if (ImGui::Button(u8"JSONテキストコピー"))
+		{
+			std::string s = KdFormat("\"Pos\" : [%.1f, %.1f, %.1f],\n", pos.x, pos.y, pos.z).c_str();
+			s += KdFormat("\"Rot\" : [%.1f, %.1f, %.1f],\n", rot.x, rot.y, rot.z).c_str();
+
+			ImGui::SetClipboardText(s.c_str());
+		}
+
+		ImGui::TreePop();
 	}
 }
 

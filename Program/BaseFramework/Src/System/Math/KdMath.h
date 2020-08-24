@@ -266,6 +266,33 @@ public:
 		_43 = v.z;
 	}
 
+	KdVec3 GetAngles()
+	{
+		KdMatrix mat = *this;
+
+		// 各軸を取得
+		KdVec3 axisX = mat.GetAxisX();
+		KdVec3 axisY = mat.GetAxisY();
+		KdVec3 axisZ = mat.GetAxisZ();
+
+		// 各軸を正規化
+		axisX.Normalize();
+		axisY.Normalize();
+		axisZ.Normalize();
+
+		// マトリックスを正規化
+		mat.SetAxisX(axisX);
+		mat.SetAxisY(axisY);
+		mat.SetAxisZ(axisZ);
+
+		KdVec3 angles;
+		angles.x = atan2f(mat.m[1][2], mat.m[2][2]);
+		angles.y = atan2f(-mat.m[0][2], sqrt(mat.m[1][2] * mat.m[1][2] + mat.m[2][2] * mat.m[2][2]));
+		angles.z = atan2f(mat.m[0][1], mat.m[0][0]);
+
+		return angles;
+	}
+
 	void Move(const KdVec3& v)
 	{
 		_41 += v.x;
