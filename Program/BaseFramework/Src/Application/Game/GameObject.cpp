@@ -107,14 +107,18 @@ void GameObject::ImGuiUpdate()
 	{
 		KdVec3 pos = m_mWorld.GetTranslation();
 		KdVec3 rot = m_mWorld.GetAngles() * KdToDegrees;
+		float sca = m_mWorld.GetAxisX().Length();
 
 		bool isChange = false;
 
 		isChange |= ImGui::DragFloat3("Position", &pos.x, 0.01f);
 		isChange |= ImGui::DragFloat3("Rotation", &rot.x, 0.1f);
+		isChange |= ImGui::DragFloat("Scale", &sca, 0.01f);
 
 		if (isChange)
 		{
+			m_mWorld.CreateScalling(sca, sca, sca);
+
 			rot *= KdToRadians;
 
 			KdMatrix mR;
@@ -122,7 +126,7 @@ void GameObject::ImGuiUpdate()
 			mR.RotateY(rot.y);
 			mR.RotateZ(rot.z);
 
-			m_mWorld = mR;
+			m_mWorld *= mR;
 
 			m_mWorld.SetTranslation(pos);
 		}
@@ -131,6 +135,7 @@ void GameObject::ImGuiUpdate()
 		{
 			std::string s = KdFormat("\"Pos\" : [%.1f, %.1f, %.1f],\n", pos.x, pos.y, pos.z).c_str();
 			s += KdFormat("\"Rot\" : [%.1f, %.1f, %.1f],\n", rot.x, rot.y, rot.z).c_str();
+			s += KdFormat("\"Scale\" : [%.1f, %.1f, %.1f],\n", sca, sca, sca).c_str();
 
 			ImGui::SetClipboardText(s.c_str());
 		}
@@ -184,7 +189,7 @@ bool GameObject::HitCheckByRay(const RayInfo& rInfo, KdRayResult& rResult)
 		);
 
 		// より近い判定を優先する
-		if (tmpResult.m_distance < rResult.m_distance)
+		if (tmpResult.m_distance > rResult.m_distance)
 		{
 			rResult = tmpResult;
 		}

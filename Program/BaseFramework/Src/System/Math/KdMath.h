@@ -293,6 +293,19 @@ public:
 		return angles;
 	}
 
+	KdVec3 GetScale()
+	{
+		KdMatrix mat = *this;
+
+		KdVec3 sca;
+
+		sca.x = sqrt(pow(mat.m[0][0], 2.0) + pow(mat.m[0][1], 2.0) + pow(mat.m[0][2], 2.0));
+		sca.y = sqrt(pow(mat.m[1][0], 2.0) + pow(mat.m[1][1], 2.0) + pow(mat.m[1][2], 2.0));
+		sca.z = sqrt(pow(mat.m[2][0], 2.0) + pow(mat.m[2][1], 2.0) + pow(mat.m[2][2], 2.0));
+
+		return sca;
+	}
+
 	void Move(const KdVec3& v)
 	{
 		_41 += v.x;

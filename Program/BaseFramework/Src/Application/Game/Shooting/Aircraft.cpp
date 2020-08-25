@@ -99,14 +99,11 @@ void Aircraft::UpdateMove()
 	KdVec3 rotate = { inputRotate.y, 0.0f, -inputRotate.x };
 
 	//回転行列作成
-	//Math::Matrix rotateMat = DirectX::XMMatrixRotationX(rotate.x * KdToRadians);
-	//rotateMat = DirectX::XMMatrixMultiply(rotateMat, DirectX::XMMatrixRotationZ(rotate.z * KdToRadians));
 	KdMatrix rotateMat;
 	rotateMat.CreateRotationX(rotate.x * KdToRadians);
 	rotateMat.RotateZ(rotate.z * KdToRadians);
 
 	//ワールド行列に合成
-	//m_mWorld = DirectX::XMMatrixMultiply(rotateMat, m_mWorld);
 	m_mWorld = rotateMat * m_mWorld;
 }
 
