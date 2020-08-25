@@ -1,6 +1,10 @@
 {
   "GameObjects": [
     {
+      "ClassName": "ShootingGameProcess",
+      "Name": "GameProcess"
+    },
+    {
       "ClassName": "GameObject",
       "Prefab": "Data/Scene/StageMap.json",
       "Name": "StageMap"

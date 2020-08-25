@@ -17,13 +17,13 @@ public:
 
 	~Scene();
 
+	void RequestChangeScene(const std::string& fileName);	//シーン変更のリクエスト
+
 	void Init();		//初期化
 	void Deserialize();
 	void Release();		//解放
 	void Update();		//更新処理
 	void Draw();		//描画処理
-
-	void LoadScene(const std::string& sceneFilename);
 
 	void AddObject(std::shared_ptr<GameObject> pObject);
 	const std::list<std::shared_ptr<GameObject>> 
@@ -44,6 +44,14 @@ public:
 
 private:
 	Scene();
+
+	void LoadScene(const std::string& sceneFilename);
+
+	void ExecChangeScene();
+	void Reset();
+
+	std::string m_nextSceneFileName = "";	// 次のシーンのJsonファイル名
+	bool m_isRequestChangeScene = false;	// シーン遷移のリクエストがあったか
 
 	std::shared_ptr<KdModel> m_spSky = nullptr;	// スカイスフィア
 	std::shared_ptr <EditorCamera>	m_spCamera = nullptr;

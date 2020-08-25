@@ -1,0 +1,14 @@
+{
+  "GameObjects": [
+    {
+      "ClassName": "ActionGameProcess",
+      "Name": "GameProcess"
+    },
+    {
+      "ClassName": "GameObject",
+      "Name": "StageMap",
+      "ModelFileName": "Data/StageMap/StageMap.gltf",
+      "Scale": [ 1, 1, 1 ]
+    }
+  ]
+}

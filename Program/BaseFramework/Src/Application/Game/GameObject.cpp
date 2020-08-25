@@ -1,6 +1,9 @@
 ﻿#include "GameObject.h"
 #include "../Game/Shooting/Aircraft.h"
 
+#include"Shooting/ShootingGameProcess.h"
+#include"Action/ActionGameProcess.h"
+
 #include "../Component/CameraComponent.h"
 #include "../Component/InputComponent.h"
 #include "../Component/ModelComponent.h"
@@ -208,8 +211,14 @@ std::shared_ptr<GameObject> CreateGameObject(const std::string& name)
 	if (name == "GameObject") {
 		return std::make_shared<GameObject>();
 	}
-	else if (name == "Aircraft") {
+	if (name == "Aircraft") {
 		return std::make_shared<Aircraft>();
+	}
+	if (name == "ShootingGameProcess") {
+		return std::make_shared<ShootingGameProcess>();
+	}
+	if (name == "ActionGameProcess") {
+		return std::make_shared<ActionGameProcess>();
 	}
 
 	// 文字列が既存クラスに一致しなかった

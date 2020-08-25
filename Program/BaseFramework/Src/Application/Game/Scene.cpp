@@ -91,6 +91,8 @@ void Scene::Deserialize()
 {
 	LoadScene("Data/Scene/ShootingGame.json");
 
+	//LoadScene("Data/Scene/ActionGame.json");
+
 	std::shared_ptr<AnimationEffect> spExp = std::make_shared<AnimationEffect>();
 	spExp->SetAnimationInfo(KdResFac.GetTexture("Data/Texture/Explosion00.png"), 10.0f, 5, 5, 0.0f);
 	AddObject(spExp);
@@ -141,6 +143,12 @@ void Scene::Update()
 			{
 				++spObjectItr;
 			}
+		}
+
+		// シーンの遷移リクエストがあったらロードする
+		if (m_isRequestChangeScene)
+		{
+			ExecChangeScene();
 		}
 	}
 }
@@ -231,10 +239,18 @@ void Scene::Draw()
 	}
 }
 
+void Scene::Reset()
+{
+	m_spObjects.clear();
+	m_wpImguiSelectObj.reset();
+	m_wpTargetCamera.reset();
+	m_spSky = nullptr;
+}
+
 void Scene::LoadScene(const std::string& sceneFilename)
 {
-	// GameObjectリストを空にする
-	m_spObjects.clear();
+	// 各項目を空にする
+	Reset();
 
 	//JSON読み込み
 	json11::Json json = KdResFac.GetJSON(sceneFilename);
@@ -411,4 +427,18 @@ void Scene::AddDebugCoordinateAxisLine(const Math::Vector3& pos, float scale)
 	m_debugLines.push_back(ver);
 
 	m_debugLines.push_back(ver);
+}
+
+void Scene::RequestChangeScene(const std::string& fileName)
+{
+	m_nextSceneFileName = fileName;
+
+	m_isRequestChangeScene = true;
+}
+
+void Scene::ExecChangeScene()
+{
+	LoadScene(m_nextSceneFileName);
+
+	m_isRequestChangeScene = false;
 }
