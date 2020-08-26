@@ -89,7 +89,7 @@ void Scene::Init()
 
 void Scene::Deserialize()
 {
-	LoadScene("Data/Scene/ShootingGame.json");
+	LoadScene("Data/Scene/ActionGame.json");
 
 	//LoadScene("Data/Scene/ActionGame.json");
 

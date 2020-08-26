@@ -9,6 +9,12 @@
       "Name": "StageMap",
       "ModelFileName": "Data/StageMap/StageMap.gltf",
       "Scale": [ 1, 1, 1 ]
+    },
+    {
+      "ClassName": "Human",
+      "Name": "PlayerHuman",
+      "Tag": 19,
+      "ModelFileName": "Data/Human/Human.gltf"
     }
   ]
 }

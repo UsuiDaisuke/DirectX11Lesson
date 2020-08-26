@@ -3,8 +3,15 @@
 
 void ActionGameProcess::Update()
 {
-	if (GetAsyncKeyState(VK_RETURN) & 0x8000)
+	if (GetAsyncKeyState(VK_SPACE) & 0x8000)
 	{
-		Scene::GetInstance().RequestChangeScene("Data/Scene/ShootingGame.json");
+		if (m_canChangeScene)
+		{
+			Scene::GetInstance().RequestChangeScene("Data/Scene/ShootingGame.json");
+		}
+		m_canChangeScene = false;
+	}
+	else {
+		m_canChangeScene = true;
 	}
 }

@@ -94,3 +94,16 @@ public:
 
 	virtual void Update() override;
 };
+
+//========================================
+//  アクションゲーム用入力コンポーネント
+//========================================
+class ActionPlayerInputComponent : public InputComponent
+{
+public:
+	ActionPlayerInputComponent(GameObject& owner) : InputComponent(owner) {};
+
+	virtual void Update() override;
+
+	POINT m_prevMousePos;
+};

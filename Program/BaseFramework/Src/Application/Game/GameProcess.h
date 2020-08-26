@@ -9,4 +9,7 @@ public:
 	GameProcess() {}
 	virtual ~GameProcess() {}
 
+protected:
+	bool m_canChangeScene = true;
+
 };

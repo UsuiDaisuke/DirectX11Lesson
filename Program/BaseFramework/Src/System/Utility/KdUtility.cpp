@@ -31,14 +31,16 @@ void KdMergePrefab(json11::Json& rSrcJson)
 
 		if (prefJson.is_null() == false)
 		{
+			json11::Json::object copyPrefab = prefJson.object_items();
+
 			//マージする
 			for (auto&& n : rSrcJson.object_items())
 			{
-				prefJson[n.first] = n.second;
+				copyPrefab[n.first] = n.second;
 			}
 
 			//マージしたものに差し替え
-			rSrcJson = prefJson;
+			rSrcJson = copyPrefab;
 		}
 	}
 }

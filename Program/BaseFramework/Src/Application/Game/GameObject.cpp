@@ -3,6 +3,7 @@
 
 #include"Shooting/ShootingGameProcess.h"
 #include"Action/ActionGameProcess.h"
+#include"Action/Human.h"
 
 #include "../Component/CameraComponent.h"
 #include "../Component/InputComponent.h"
@@ -219,6 +220,9 @@ std::shared_ptr<GameObject> CreateGameObject(const std::string& name)
 	}
 	if (name == "ActionGameProcess") {
 		return std::make_shared<ActionGameProcess>();
+	}
+	if (name == "Human") {
+		return std::make_shared<Human>();
 	}
 
 	// 文字列が既存クラスに一致しなかった

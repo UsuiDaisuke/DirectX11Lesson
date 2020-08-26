@@ -92,3 +92,27 @@ void EnemyInputComponent::Update()
 	m_axes[Input::Axes::L].y = 1.0f;
 	m_axes[Input::Axes::R].y = -1.0f;
 }
+
+void ActionPlayerInputComponent::Update()
+{
+	for (auto& rAxis : m_axes)
+	{
+		rAxis = { 0.0f, 0.0f };
+	}
+
+	//左軸の入力
+	if (GetAsyncKeyState('W')) { m_axes[Input::Axes::L].y = 1.0f; }
+	if (GetAsyncKeyState('S')) { m_axes[Input::Axes::L].y = -1.0f; }
+	if (GetAsyncKeyState('D')) { m_axes[Input::Axes::L].x = 1.0f; }
+	if (GetAsyncKeyState('A')) { m_axes[Input::Axes::L].x = -1.0f; }
+
+	//右軸の入力
+	POINT nowMousePos;
+	GetCursorPos(&nowMousePos);
+	m_axes[Input::R].x = (float)(nowMousePos.x - m_prevMousePos.x);
+	m_axes[Input::R].y = (float)(nowMousePos.y - m_prevMousePos.y);
+	m_prevMousePos = nowMousePos;
+
+	if (GetAsyncKeyState('E')) { PushButton(Input::Buttons::A); }
+	else { ReleaseButton(Input::Buttons::A); }
+}

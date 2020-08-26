@@ -207,6 +207,9 @@
     <ClInclude Include="Src\Application\Game\Action\ActionGameProcess.h">
       <Filter>Src\Application\Game\Action</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Application\Game\Action\Human.h">
+      <Filter>Src\Application\Game\Action</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -321,6 +324,9 @@
       <Filter>Src\Application\Game\Shooting</Filter>
     </ClCompile>
     <ClCompile Include="Src\Application\Game\Action\ActionGameProcess.cpp">
+      <Filter>Src\Application\Game\Action</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Game\Action\Human.cpp">
       <Filter>Src\Application\Game\Action</Filter>
     </ClCompile>
   </ItemGroup>
