@@ -111,7 +111,25 @@ void ActionPlayerInputComponent::Update()
 	GetCursorPos(&nowMousePos);
 	m_axes[Input::R].x = (float)(nowMousePos.x - m_prevMousePos.x);
 	m_axes[Input::R].y = (float)(nowMousePos.y - m_prevMousePos.y);
-	m_prevMousePos = nowMousePos;
+
+	//マウスの固定
+	if (GetAsyncKeyState('Z') && !m_cursorFlag) {
+		ShowCursor(false);
+		m_cursorFlag = true; 
+	}
+	if (GetAsyncKeyState(VK_ESCAPE) && m_cursorFlag) {
+		ShowCursor(true);
+		m_cursorFlag = false; 
+	}
+
+	if (m_cursorFlag)
+	{
+		SetCursorPos(m_prevMousePos.x, m_prevMousePos.y);
+	}
+	else {
+		m_prevMousePos = nowMousePos;
+	}
+
 
 	if (GetAsyncKeyState('E')) { PushButton(Input::Buttons::A); }
 	else { ReleaseButton(Input::Buttons::A); }

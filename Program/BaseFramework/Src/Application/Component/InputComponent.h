@@ -106,4 +106,5 @@ public:
 	virtual void Update() override;
 
 	POINT m_prevMousePos;
+	bool m_cursorFlag = false;
 };

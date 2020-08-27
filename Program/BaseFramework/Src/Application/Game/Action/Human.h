@@ -17,4 +17,8 @@ private:
 	void UpdateCamera();
 	float m_camRotSpeed = 0.2f;
 	KdMatrix m_mCamMat;
+
+	void UpdateRotate(const KdVec3& rMoveDir);
+	float m_rotateAngle = 10.0f;
+	KdVec3 m_rot;
 };
