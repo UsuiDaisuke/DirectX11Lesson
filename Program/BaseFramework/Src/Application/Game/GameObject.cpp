@@ -193,7 +193,7 @@ bool GameObject::HitCheckByRay(const RayInfo& rInfo, KdRayResult& rResult)
 		);
 
 		// より近い判定を優先する
-		if (tmpResult.m_distance > rResult.m_distance)
+		if (tmpResult.m_distance < rResult.m_distance)
 		{
 			rResult = tmpResult;
 		}

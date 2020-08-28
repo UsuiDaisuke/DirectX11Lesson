@@ -4,6 +4,10 @@
 #include"../../Component/CameraComponent.h"
 #include"../../Component/InputComponent.h"
 
+// static const変数の初期化
+const float Human::s_allowToStepHeight = 0.8f;
+const float Human::s_landingHeight = 0.1f;
+
 void Human::Deserialize(const json11::Json& jsonObj)
 {
 	GameObject::Deserialize(jsonObj);
@@ -31,7 +35,20 @@ void Human::Update()
 		m_spInputComponent->Update();
 	}
 
+	// 移動前の座標を覚える
+	m_prevPos = m_pos;
+
 	UpdateMove();
+
+	// 重力をキャラクターのYの移動力に加える
+	m_force.y -= m_gravity;
+
+	// 移動力をキャラクターの座標に足しこむ
+	m_pos.x += m_force.x;
+	m_pos.y += m_force.y;
+	m_pos.z += m_force.z;
+
+	UpdateCollision();
 
 	m_mWorld.CreateRotationX(m_rot.x);
 	m_mWorld.RotateY(m_rot.y);
@@ -65,8 +82,8 @@ void Human::UpdateMove()
 
 	moveVec *= m_moveSpeed;
 
-	m_pos.x += moveVec.x;
-	m_pos.z += moveVec.z;
+	m_force.x = moveVec.x;
+	m_force.z = moveVec.z;
 }
 
 void Human::UpdateCamera()
@@ -113,4 +130,68 @@ void Human::UpdateRotate(const KdVec3& rMoveDir)
 	rotateRadian = std::clamp(rotateRadian, -m_rotateAngle * KdToRadians, m_rotateAngle * KdToRadians);
 
 	m_rot.y += rotateRadian;
+}
+
+void Human::UpdateCollision()
+{
+	float distanceFromGround = FLT_MAX;
+
+	if (CheckGround(distanceFromGround))
+	{
+		m_pos.y += s_allowToStepHeight - distanceFromGround;
+
+		m_force.y = 0.0f;
+	}
+}
+
+bool Human::CheckGround(float& rDstDistance)
+{
+	RayInfo rayInfo;
+	rayInfo.m_pos = m_pos;
+
+	rayInfo.m_pos.y += s_allowToStepHeight;
+
+	rayInfo.m_pos.y += m_prevPos.y - m_pos.y;
+
+	rayInfo.m_dir = { 0.0f, -1.0f, 0.0f };
+
+	rayInfo.m_maxRange = FLT_MAX;
+	KdRayResult finalRayResult;
+
+	for (auto& obj : Scene::GetInstance().GetObjects())
+	{
+		if (obj.get() == this) { continue; }
+
+		if (!(obj->GetTag() & (TAG_StageObject))) { continue; }
+
+		KdRayResult rayResult;
+
+		if (obj->HitCheckByRay(rayInfo, rayResult))
+		{
+			if (rayResult.m_distance < finalRayResult.m_distance)
+			{
+				finalRayResult = rayResult;
+			}
+		}
+	}
+
+	float distanceFromGround = FLT_MAX;
+
+	if (finalRayResult.m_hit)
+	{
+		distanceFromGround = finalRayResult.m_distance - (m_prevPos.y - m_pos.y);
+	}
+
+	if (m_force.y > 0.0f)
+	{
+		m_isGround = false;
+	}
+	else
+	{
+		m_isGround = (distanceFromGround < (s_allowToStepHeight + s_landingHeight));
+	}
+
+	rDstDistance = distanceFromGround;
+
+	return m_isGround;
 }

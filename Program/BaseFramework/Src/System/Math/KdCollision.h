@@ -2,7 +2,7 @@
 
 struct KdRayResult
 {
-	float	m_distance = -1;
+	float	m_distance = FLT_MAX;
 	bool	m_hit = false;
 };
 
