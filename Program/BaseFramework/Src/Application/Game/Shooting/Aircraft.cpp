@@ -7,6 +7,7 @@
 #include "../../Component/ModelComponent.h"
 #include "EffectObject.h"
 
+// 3DS課題変更箇所===== ===== ===== ===== ===== ===== ===== ===== ===== =====
 void Aircraft::Deserialize(const json11::Json& jsonObj)
 {
 	GameObject::Deserialize(jsonObj);
@@ -40,8 +41,20 @@ void Aircraft::Deserialize(const json11::Json& jsonObj)
 
 	m_spActionState = std::make_shared<ActionFly>();
 
-	m_propTrail.SetTexture(KdResFac.GetInstance().GetTexture("Data/Texture/sabelline.png"));
+	
+	if (jsonObj["Propeller"].is_null() == false)
+	{
+		m_propNum = jsonObj["Propeller"].int_value();
+	}
+	for (int i = 0; i < m_propNum; i++)
+	{
+		std::shared_ptr<KdTrailPolygon> prop = std::make_shared<KdTrailPolygon>();
+		prop->SetTexture(KdResFac.GetInstance().GetTexture("Data/Texture/sabelline.png"));
+
+		m_propTrails.push_back(prop);
+	}
 }
+// 3DS課題変更箇所===== ===== ===== ===== ===== ===== ===== ===== ===== =====
 
 void Aircraft::Update()
 {
@@ -125,7 +138,7 @@ void Aircraft::UpdateShoot()
 				spMissile->Deserialize(KdResFac.GetJSON("Data/Scene/Missile.json"));
 
 				KdMatrix mLaunch;
-				mLaunch.CreateRotationX((rand() % 120 - 60.0f)* KdToRadians);
+				mLaunch.CreateRotationX((rand() % 120 - 60.0f) * KdToRadians);
 				mLaunch.RotateY((rand() % 120 - 60.0f) * KdToRadians);
 				mLaunch *= m_mWorld;
 
@@ -278,30 +291,38 @@ void Aircraft::UpdateCollision()
 	}
 }
 
+// 3DS課題変更箇所===== ===== ===== ===== ===== ===== ===== ===== ===== =====
 void Aircraft::UpdatePropeller()
 {
+	float offset = 360.0f / (float)m_propNum;
+
 	KdModel::Node* propNode = m_spModelComponent->FindNode("propeller");
 	if (propNode)
 	{
 		propNode->m_localTransform.RotateZ(m_propRotSpeed);
 
-		KdMatrix propCenterMat;
-		propCenterMat *= propNode->m_localTransform * m_mWorld;
-		
-		KdMatrix propOuterMat;
-		propOuterMat.CreateTranslation(0.0f, 1.8f, 0.0f);
-		propOuterMat *= propCenterMat;
-
-		m_propTrail.AddPoint(propCenterMat);
-		m_propTrail.AddPoint(propOuterMat);
-
-		if (m_propTrail.GetNumPoints() > 30)
+		for (int i = 0; i < m_propNum; i++)
 		{
-			m_propTrail.DelPoint_Back();
-			m_propTrail.DelPoint_Back();
+			KdMatrix propCenterMat;
+			propCenterMat.CreateRotationZ((offset * i) * KdToRadians);
+			propCenterMat *= propNode->m_localTransform * m_mWorld;
+
+			KdMatrix propOuterMat;
+			propOuterMat.CreateTranslation(0.0f, 1.8f, 0.0f);
+			propOuterMat *= propCenterMat;
+
+			m_propTrails[i]->AddPoint(propCenterMat);
+			m_propTrails[i]->AddPoint(propOuterMat);
+
+			if (m_propTrails[i]->GetNumPoints() > 30 / m_propNum)
+			{
+				m_propTrails[i]->DelPoint_Back();
+				m_propTrails[i]->DelPoint_Back();
+			}
 		}
 	}
 }
+// 3DS課題変更箇所===== ===== ===== ===== ===== ===== ===== ===== ===== =====
 
 void Aircraft::Draw()
 {
@@ -339,6 +360,7 @@ void Aircraft::OnNotify_Damage(int damage)
 	}
 }
 
+// 3DS課題変更箇所===== ===== ===== ===== ===== ===== ===== ===== ===== =====
 void Aircraft::DrawEffect()
 {
 	D3D.GetDevContext()->OMSetBlendState(SHADER.m_bs_Add, Math::Color(0, 0, 0, 0), 0xFFFFFFFF);
@@ -346,10 +368,14 @@ void Aircraft::DrawEffect()
 	SHADER.m_effectShader.SetWorldMatrix(KdMatrix());
 	SHADER.m_effectShader.WriteToCB();
 
-	m_propTrail.DrawStrip();
+	for (auto prop : m_propTrails)
+	{
+		prop->DrawStrip();
+	}
 
 	D3D.GetDevContext()->OMSetBlendState(SHADER.m_bs_Alpha, Math::Color(0, 0, 0, 0), 0xFFFFFFFF);
 }
+// 3DS課題変更箇所===== ===== ===== ===== ===== ===== ===== ===== ===== =====
 
 void Aircraft::ActionFly::Update(Aircraft& owner)
 {

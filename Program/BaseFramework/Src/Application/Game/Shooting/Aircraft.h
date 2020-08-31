@@ -29,7 +29,11 @@ private:
 	// KdMatrix m_mPropLocal;
 
 	float m_propRotSpeed;
-	KdTrailPolygon m_propTrail;
+	// 3DS課題変更箇所===== ===== ===== ===== ===== ===== ===== ===== ===== =====
+	// KdTrailPolygon m_propTrail;
+	int m_propNum = 3;
+	std::vector<std::shared_ptr<KdTrailPolygon>> m_propTrails;
+	// 3DS課題変更箇所===== ===== ===== ===== ===== ===== ===== ===== ===== =====
 
 	KdVec3			m_velocity;
 
@@ -38,11 +42,11 @@ private:
 
 	KdVec3			m_prevPos = {};			// 1フレーム前の座標
 
-	bool	m_laser = false;
-	float	m_laserRange = 1000.0f;
+	bool			m_laser = false;
+	float			m_laserRange = 1000.0f;
 
-	int		m_hp = 10;
-	int			m_attackPow = 1;
+	int				m_hp = 10;
+	int				m_attackPow = 1;
 
 	// 基底アクションステート
 	class BaseAction
