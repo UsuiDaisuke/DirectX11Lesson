@@ -41,6 +41,7 @@ void AnimationEffect::Update()
 
 void AnimationEffect::DrawEffect()
 {
+	/*
 	// 各軸方向の拡大率を取得
 	float scaleX = m_mWorld.GetAxisX().Length();
 	float scaleY = m_mWorld.GetAxisY().Length();
@@ -60,9 +61,12 @@ void AnimationEffect::DrawEffect()
 
 	// 座標は自分のものを使う
 	drawMat.SetTranslation(m_mWorld.GetTranslation());
+	*/
+
+	m_mWorld.SetBillboard(SHADER.m_cb7_Camera.GetWork().mV);
 
 	// 描画
-	SHADER.m_effectShader.SetWorldMatrix(drawMat);
+	SHADER.m_effectShader.SetWorldMatrix(m_mWorld);
 	SHADER.m_effectShader.WriteToCB();
 	m_poly.Draw(0);
 }

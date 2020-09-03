@@ -94,6 +94,37 @@ public:
 	{
 		return DirectX::XMVector3Cross(v1, v2);
 	}
+
+	// 徐々に特定の方向を向く
+	inline void Complement(const KdVec3& vTo, float rot)
+	{
+		// ※※※※※回転軸作成（この軸で回転する）※※※※※
+		KdVec3 vRotAxis = KdVec3::Cross(*this, vTo);
+
+		// 0ベクトルなら回転しない
+		if (vRotAxis.LengthSquared() != 0)
+		{
+			// 自分のZ方向ベクトルと自身からターゲットへ向かうベクトルの内積
+			float d = KdVec3::Dot(*this, vTo);
+
+			// 誤差で-1～1以外になる可能性大なので、クランプする
+			if (d > 1.0f)d = 1.0f;
+			else if (d < -1.0f)d = -1.0f;
+
+			// 自分の前方向ベクトルと自身からターゲットへ向かうベクトル間の角度(radian)
+			float radian = acos(d);
+
+			// 角度制限 １フレームにつき最大で指定角度以上回転しない
+			if (radian > rot * KdToRadians)
+			{
+				radian = rot * KdToRadians;
+			}
+
+			KdVec3 axis = (vTo - *this);
+
+			*this = *this + (axis * radian);
+		}
+	}
 };
 
 //4x4の行列
@@ -322,6 +353,26 @@ public:
 	KdMatrix Invert()
 	{
 		return DirectX::XMMatrixInverse(nullptr, *this);
+	}
+
+	//正面を向かせる
+	inline void SetBillboard(const KdMatrix& mat)
+	{
+		//拡大率の保持
+		float scaleX = this->GetAxisX().Length();
+		float scaleY = this->GetAxisY().Length();
+		float scaleZ = this->GetAxisZ().Length();
+
+		// ビルボード処理
+		KdMatrix drawMat;
+		drawMat.CreateScalling(scaleX, scaleY, scaleZ);
+
+		KdMatrix targetMat = mat;
+		drawMat *= targetMat.Invert();
+
+		drawMat.SetTranslation(this->GetTranslation());
+
+		*this = drawMat;
 	}
 
 private:

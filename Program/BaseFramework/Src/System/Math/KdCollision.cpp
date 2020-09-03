@@ -92,5 +92,8 @@ bool KdRayToMesh(
 
 	rResult.m_distance = closestDist;
 	rResult.m_hit = ret;
+
+	// 着弾地点を計算し格納
+	rResult.rHitPos = rRayPos + (rRayDir * closestDist);;
 	return ret;
 }

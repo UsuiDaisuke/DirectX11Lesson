@@ -4,6 +4,7 @@ struct KdRayResult
 {
 	float	m_distance = FLT_MAX;
 	bool	m_hit = false;
+	KdVec3 rHitPos = {};
 };
 
 //レイによる当たり判定
