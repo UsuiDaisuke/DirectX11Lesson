@@ -2,6 +2,8 @@
 #include "GameObject.h"
 #include "../Component/CameraComponent.h"
 
+#include "../main.h"
+
 #include "EditorCamera.h"
 #include "Shooting/Aircraft.h"
 #include "Shooting/Missile.h"
@@ -83,6 +85,8 @@ void Scene::Init()
 	m_spSky = KdResourceFactory::GetInstance().GetModel("Data/Sky/Sky.gltf");
 
 	m_spCamera = std::make_shared<EditorCamera>();
+
+	m_EditorLog = std::make_shared<ImGuiLogWindow>();
 
 	Deserialize();
 }
@@ -328,6 +332,56 @@ void Scene::ImGuiUpdate()
 		}
 	}
 	ImGui::End();
+
+	// プレハブウィンド
+	if (ImGui::Begin("PrefabFactory"))
+	{
+		ImGui::InputText("", &Createpath);
+
+		ImGui::SameLine();
+		if (ImGui::Button(u8"Jsonパス取得"))
+		{
+			std::string filepath = "";
+			if (APP.m_window.OpenFileDialog
+					(filepath, 
+					"ファイルを開く", 
+					"JSONファイル\0*.json\0")
+				)
+			{
+				Createpath = filepath;
+			}
+		}
+
+		if (ImGui::Button("Create"))
+		{
+			json11::Json json = KdResFac.GetJSON(Createpath);
+			if (json.is_null())
+			{
+				m_EditorLog->AddLog(u8"%s 読み込み失敗", Createpath.c_str());
+				return;
+			}
+
+			if (json["ClassName"].is_null())
+			{
+				m_EditorLog->AddLog(u8"%s 生成失敗", Createpath.c_str());
+				return;
+			}
+
+			auto newGameObj = CreateGameObject(json["ClassName"].string_value());
+
+			KdMergePrefab(json);
+
+			//オブジェクトのデシリアライズ
+			newGameObj->Deserialize(json);
+
+			//リストへ追加
+			AddObject(newGameObj);
+			m_EditorLog->AddLog(u8"%s 生成完了", Createpath.c_str());
+		}
+	}
+	ImGui::End();
+
+	m_EditorLog->ImGuiUpdate("Log Window");
 }
 
 void Scene::AddDebugLines(const Math::Vector3& p1, const Math::Vector3& p2, const Math::Color& color)

@@ -1,4 +1,5 @@
 {
+  "ClassName": "Aircraft",
   "Tag": 1,
   "Name": "Enemy",
   "ModelFileName": "Data/Aircraft/Aircraft_body.gltf",

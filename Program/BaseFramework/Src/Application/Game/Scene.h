@@ -4,6 +4,7 @@
 class GameObject;
 class EditorCamera;
 class CameraComponent;
+class ImGuiLogWindow;
 
 class Scene
 {
@@ -26,7 +27,7 @@ public:
 	void Draw();		//描画処理
 
 	void AddObject(std::shared_ptr<GameObject> pObject);
-	const std::list<std::shared_ptr<GameObject>> 
+	const std::list<std::shared_ptr<GameObject>>
 		GetObjects() const { return m_spObjects; }
 
 	void ImGuiUpdate();	//ImGuiの更新
@@ -50,8 +51,13 @@ private:
 	void ExecChangeScene();
 	void Reset();
 
+	std::shared_ptr<ImGuiLogWindow> m_EditorLog;
+
 	std::string m_nextSceneFileName = "";	// 次のシーンのJsonファイル名
 	bool m_isRequestChangeScene = false;	// シーン遷移のリクエストがあったか
+
+
+	std::string Createpath;
 
 	std::shared_ptr<KdModel> m_spSky = nullptr;	// スカイスフィア
 	std::shared_ptr <EditorCamera>	m_spCamera = nullptr;
@@ -77,4 +83,43 @@ private:
 	};
 
 	pauseState pauseFlag = PAUSE_OFF_KEEP;
+};
+
+//==================================================
+//ログウィンドウクラス(仮置き)
+//==================================================
+class ImGuiLogWindow
+{
+public:
+	// ログをクリア
+	void Clear() { m_textBuff.clear(); }
+
+	// 文字列を追加
+	template<class... Args>
+	void AddLog(const char* fmt, Args... args)
+	{
+		std::string str = fmt;
+		str += "\n";
+		m_textBuff.appendf(str.c_str(), args...);
+		m_ScrollToBottom = true;
+	}
+
+	// 描画
+	void ImGuiUpdate(const char* title, bool* p_opened = NULL)
+	{
+		ImGui::Begin(title, p_opened);
+		ImGui::TextUnformatted(m_textBuff.begin());
+
+		// Logが追加されたら一番下までスクロール
+		if (m_ScrollToBottom)
+		{
+			ImGui::SetScrollHere(1.0f);
+			m_ScrollToBottom = false;
+		}
+		ImGui::End();
+	}
+
+private:
+	ImGuiTextBuffer	m_textBuff;
+	bool			m_ScrollToBottom;
 };
