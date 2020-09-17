@@ -10,4 +10,8 @@ public:
 
 	void Update() override;
 
+private:
+	void ChangeCamTarget();
+
+	std::string m_strCameraTarget = "Player";
 };

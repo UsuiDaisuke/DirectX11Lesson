@@ -293,6 +293,17 @@ void Scene::AddObject(std::shared_ptr<GameObject> pObject)
 	m_spObjects.push_back(pObject);
 }
 
+std::shared_ptr<GameObject> Scene::FindObjectWithName(const std::string& name)
+{
+	for (auto&& obj : m_spObjects)
+	{
+		if (obj->GetName() == name) { return obj; }
+	}
+
+	// 見つからなかったらnullを返す
+	return nullptr;
+}
+
 void Scene::ImGuiUpdate()
 {
 	if (ImGui::Begin("Scene"))
@@ -310,7 +321,7 @@ void Scene::ImGuiUpdate()
 
 				ImGui::PushID(rObj.get());
 
-				if (ImGui::Selectable(rObj->GetName(), selected))
+				if (ImGui::Selectable(rObj->GetName().c_str(), selected))
 				{
 					m_wpImguiSelectObj = rObj;
 				}

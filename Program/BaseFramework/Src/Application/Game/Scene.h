@@ -30,6 +30,8 @@ public:
 	const std::list<std::shared_ptr<GameObject>>
 		GetObjects() const { return m_spObjects; }
 
+	std::shared_ptr<GameObject>FindObjectWithName(const std::string& name);
+
 	void ImGuiUpdate();	//ImGuiの更新
 
 	// デバッグライン描画
