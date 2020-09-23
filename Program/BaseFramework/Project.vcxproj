@@ -170,6 +170,7 @@
     <ClInclude Include="Src\Application\Game\Shooting\EffectObject.h" />
     <ClInclude Include="Src\Application\Game\Shooting\Missile.h" />
     <ClInclude Include="Src\Application\Game\Shooting\ShootingGameProcess.h" />
+    <ClInclude Include="Src\Application\Game\Tank\Tank.h" />
     <ClInclude Include="Src\Application\main.h" />
     <ClInclude Include="src\System\Direct3D\KdDirect3D.h" />
     <ClInclude Include="Src\System\Direct3D\KdGLTFLoader.h" />
@@ -214,6 +215,7 @@
     <ClCompile Include="Src\Application\Game\Shooting\EffectObject.cpp" />
     <ClCompile Include="Src\Application\Game\Shooting\Missile.cpp" />
     <ClCompile Include="Src\Application\Game\Shooting\ShootingGameProcess.cpp" />
+    <ClCompile Include="Src\Application\Game\Tank\Tank.cpp" />
     <ClCompile Include="Src\Application\main.cpp" />
     <ClCompile Include="src\System\Direct3D\KdDirect3D.cpp" />
     <ClCompile Include="Src\System\Direct3D\KdGLTFLoader.cpp" />

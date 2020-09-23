@@ -1,21 +1,21 @@
-﻿#include"Human.h"
+﻿#include "Tank.h"
 
 #include"../Scene.h"
 #include"../../Component/CameraComponent.h"
 #include"../../Component/InputComponent.h"
 
 // static const変数の初期化
-const float Human::s_allowToStepHeight = 0.8f;
-const float Human::s_landingHeight = 0.1f;
+const float Tank::s_allowToStepHeight = 0.8f;
+const float Tank::s_landingHeight = 0.1f;
 
-void Human::Deserialize(const json11::Json& jsonObj)
+void Tank::Deserialize(const json11::Json& jsonObj)
 {
 	GameObject::Deserialize(jsonObj);
 
 	// カメラコンポーネントの設定
 	if (m_spCameraComponent)
 	{
-		m_spCameraComponent->GetOffsetMatrix().CreateTranslation(0.0f, 1.5f, -5.0f);
+		m_spCameraComponent->GetOffsetMatrix().CreateTranslation(0.0f, 1.5f, -10.0f);
 		m_spCameraComponent->GetOffsetMatrix().RotateX(25.0f * KdToRadians);
 	}
 
@@ -27,9 +27,8 @@ void Human::Deserialize(const json11::Json& jsonObj)
 	}
 }
 
-void Human::Update()
-{
-	// Inputコンポーネントの更新
+void Tank::Update()
+{// Inputコンポーネントの更新
 	if (m_spInputComponent)
 	{
 		m_spInputComponent->Update();
@@ -41,7 +40,7 @@ void Human::Update()
 	UpdateMove();
 
 	// 重力をキャラクターのYの移動力に加える
-	m_force.y -= m_gravity;
+	//m_force.y -= m_gravity;
 
 	// 移動力をキャラクターの座標に足しこむ
 	m_pos.x += m_force.x;
@@ -57,90 +56,41 @@ void Human::Update()
 
 	if (m_spCameraComponent)
 	{
-		UpdateCamera();
+		m_spCameraComponent->SetCameraMatrix(m_mWorld);
 	}
 }
 
-void Human::UpdateMove()
+void Tank::UpdateMove()
 {
 	if (!m_spCameraComponent) { return; }
 
 	const Math::Vector2& inputMove = m_spInputComponent->GetAxis(Input::Axes::L);
-
-	KdVec3 moveSide = m_spCameraComponent->GetCameraMatrix().GetAxisX() * inputMove.x;
 	KdVec3 moveForward = m_spCameraComponent->GetCameraMatrix().GetAxisZ() * inputMove.y;
 
 	moveForward.y = 0.0f;
 
 	// 移動ベクトルの計算
-	KdVec3 moveVec = moveSide + moveForward;
+	KdVec3 moveVec = moveForward;
 
 	// 正規化
 	moveVec.Normalize();
 
-	UpdateRotate(moveVec);
+	UpdateRotate();
 
 	moveVec *= m_moveSpeed;
 
 	m_force.x = moveVec.x;
 	m_force.z = moveVec.z;
-
-	if (m_spInputComponent->GetButton(Input::Buttons::A))
-	{
-		if (m_isGround)
-		{
-			m_force.y = 0.2f;
-		}
-	}
 }
 
-void Human::UpdateCamera()
+void Tank::UpdateRotate()
 {
-	float deltaY = (float)(m_spInputComponent->GetAxis(Input::Axes::R).x) * m_camRotSpeed;
+	const Math::Vector2& inputMove = m_spInputComponent->GetAxis(Input::Axes::L);
 
-	KdMatrix mRotate;
-	mRotate.RotateY(deltaY * KdToRadians);
-	m_mCamMat *= mRotate;
-
-	KdMatrix trans;
-	trans.CreateTranslation(m_pos.x, m_pos.y, m_pos.z);
-	m_spCameraComponent->SetCameraMatrix(m_mCamMat * trans);
+	m_rot.y += (inputMove.x * m_rotateAngle) * KdToRadians;
 }
 
-void Human::UpdateRotate(const KdVec3& rMoveDir)
-{
-	// 移動していなければ帰る
-	if (rMoveDir.LengthSquared() == 0.0f) { return; }
-
-	// 今キャラクターの方向ベクトル
-	KdVec3 nowDir = m_mWorld.GetAxisZ();
-	nowDir.Normalize();
-
-	// キャラクターが今向いている方角の角度を求める(ラジアン角)
-	float nowRadian = atan2(nowDir.x, nowDir.z);
-
-	// 移動方向へのベクトルの角度を求める(ラジアン角)
-	float targetRadian = atan2(rMoveDir.x, rMoveDir.z);
-	float rotateRadian = targetRadian - nowRadian;
-
-	// -π～π(-180度～180度)
-	// 180度の角度で数値の切れ目
-	if (rotateRadian > M_PI)
-	{
-		rotateRadian -= 2 * float(M_PI);
-	}
-	else if (rotateRadian < -M_PI)
-	{
-		rotateRadian += 2 * float(M_PI);
-	}
-
-	// 一回の回転角度をm_rotateAngle内に収める
-	rotateRadian = std::clamp(rotateRadian, -m_rotateAngle * KdToRadians, m_rotateAngle * KdToRadians);
-
-	m_rot.y += rotateRadian;
-}
-
-void Human::UpdateCollision()
+void Tank::UpdateCollision()
 {
 	float distanceFromGround = FLT_MAX;
 
@@ -152,7 +102,7 @@ void Human::UpdateCollision()
 	}
 }
 
-bool Human::CheckGround(float& rDstDistance)
+bool Tank::CheckGround(float& rDstDistance)
 {
 	RayInfo rayInfo;
 	rayInfo.m_pos = m_pos;

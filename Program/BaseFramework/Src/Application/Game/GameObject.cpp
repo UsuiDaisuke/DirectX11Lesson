@@ -4,6 +4,7 @@
 #include"Shooting/ShootingGameProcess.h"
 #include"Action/ActionGameProcess.h"
 #include"Action/Human.h"
+#include"Tank/Tank.h"
 
 #include "../Component/CameraComponent.h"
 #include "../Component/InputComponent.h"
@@ -180,6 +181,8 @@ bool GameObject::HitCheckByRay(const RayInfo& rInfo, KdRayResult& rResult)
 
 	for (auto& node : m_spModelComponent->GetNodes())
 	{
+		if (!node.m_spMesh) { continue; }
+
 		KdRayResult tmpResult;	//結果返送用
 
 		// レイ判定(本体からのずれ分も加味して計算)
@@ -223,6 +226,9 @@ std::shared_ptr<GameObject> CreateGameObject(const std::string& name)
 	}
 	if (name == "Human") {
 		return std::make_shared<Human>();
+	}
+	if (name == "Tank") {
+		return std::make_shared<Tank>();
 	}
 
 	// 文字列が既存クラスに一致しなかった

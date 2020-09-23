@@ -58,6 +58,9 @@
     <Filter Include="Src\Application\Game\Action">
       <UniqueIdentifier>{a0ca3279-db4a-431e-8360-75f59077f215}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Application\Game\Tank">
+      <UniqueIdentifier>{be5dbe1f-473c-47e4-894e-2148756ef9c3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Pch.h">
@@ -213,6 +216,9 @@
     <ClInclude Include="Src\Application\Game\AnimationCamera.h">
       <Filter>Src\Application\Game</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Application\Game\Tank\Tank.h">
+      <Filter>Src\Application\Game\Tank</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -334,6 +340,9 @@
     </ClCompile>
     <ClCompile Include="Src\Application\Game\AnimationCamera.cpp">
       <Filter>Src\Application\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Game\Tank\Tank.cpp">
+      <Filter>Src\Application\Game\Tank</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

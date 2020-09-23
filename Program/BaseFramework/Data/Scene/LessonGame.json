@@ -1,0 +1,21 @@
+{
+  "GameObjects": [
+
+    {
+      "ClassName": "GameObject",
+      "Name": "StageMap",
+      "ModelFileName": "Data/StageMap/StageMap.gltf",
+      "Scale": [ 1, 1, 1 ]
+    },
+
+    {
+      "ClassName": "Tank",
+      "Name": "PlayerTank",
+      "Tag": 19,
+      "ModelFileName": "Data/Type-74/Type-74.gltf",
+      "CameraTarget": true
+    }
+  ],
+
+  "CameraTarget": "PlayerTank"
+}

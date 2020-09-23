@@ -1,0 +1,65 @@
+# Created by Metasequoia
+
+newmtl MmdMtl000
+Ka 0.13340 0.13340 0.66700
+Kd 0.20000 0.20000 1.00000
+Ks 0.00000 0.00000 0.00000
+Ns 100.00000
+map_Kd md_tank74_light1.jpg
+
+newmtl MmdMtl001
+Ka 0.50000 0.50000 0.50000
+Kd 1.00000 1.00000 1.00000
+Ks 0.10000 0.10000 0.10000
+Ns 1.00000
+map_Kd md_tank74_tire0.jpg
+
+newmtl MmdMtl002
+Ka 0.50000 0.50000 0.50000
+Kd 1.00000 1.00000 1.00000
+Ks 0.10000 0.10000 0.10000
+Ns 1.00000
+map_Kd md_tank74_catapira.jpg
+
+newmtl MmdMtl003
+Ka 0.50000 0.50000 0.50000
+Kd 1.00000 1.00000 1.00000
+Ks 0.10000 0.10000 0.10000
+Ns 1.00000
+map_Kd md_tank74_catapira.jpg
+
+newmtl MmdMtl004
+Ka 0.50000 0.50000 0.50000
+Kd 1.00000 1.00000 1.00000
+Ks 0.10000 0.10000 0.10000
+Ns 1.00000
+map_Kd md_tank74_00.jpg
+
+newmtl MmdMtl005
+Ka 0.50000 0.50000 0.50000
+Kd 1.00000 1.00000 1.00000
+Ks 0.10000 0.10000 0.10000
+Ns 5.00000
+map_Kd md_tank74_01.jpg
+
+newmtl MmdMtl006
+Ka 0.50000 0.50000 0.50000
+Kd 1.00000 1.00000 1.00000
+Ks 0.10000 0.10000 0.10000
+Ns 5.00000
+map_Kd md_tank74_02.jpg
+
+newmtl MmdMtl007
+Ka 0.50000 0.50000 0.50000
+Kd 1.00000 1.00000 1.00000
+Ks 0.10000 0.10000 0.10000
+Ns 1.00000
+map_Kd md_tank74_catapira_n.tga
+
+newmtl MmdMtl008
+Ka 0.50000 0.50000 0.50000
+Kd 1.00000 1.00000 1.00000
+Ks 0.10000 0.10000 0.10000
+Ns 1.00000
+map_Kd md_tank74_catapira_n.tga
+
