@@ -4,6 +4,7 @@
 #include"Shooting/ShootingGameProcess.h"
 #include"Action/ActionGameProcess.h"
 #include"Action/Human.h"
+#include"Action/Lift.h"
 #include"Tank/Tank.h"
 
 #include "../Component/CameraComponent.h"
@@ -79,7 +80,7 @@ void GameObject::Deserialize(const json11::Json& jsonObj)
 
 void GameObject::Update()
 {
-
+	m_mPrev = m_mWorld;
 }
 
 void GameObject::Draw()
@@ -229,6 +230,9 @@ std::shared_ptr<GameObject> CreateGameObject(const std::string& name)
 	}
 	if (name == "Tank") {
 		return std::make_shared<Tank>();
+	}
+	if (name == "Lift") {
+		return std::make_shared<Lift>();
 	}
 
 	// 文字列が既存クラスに一致しなかった

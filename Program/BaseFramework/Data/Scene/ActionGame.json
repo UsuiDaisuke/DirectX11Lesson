@@ -12,6 +12,15 @@
       "Scale": [ 1, 1, 1 ]
     },
     {
+      "ClassName": "Lift",
+      "Name": "Lift00",
+      "Tag": 4,
+      "ModelFileName": "Data/Box/Box2.gltf",
+      "Pos": [ 0, 0, 3 ],
+      "MoveTo": [ 0, 0, 13 ],
+      "Speed": 0.01
+    },
+    {
       "ClassName": "Human",
       "Name": "PlayerHuman",
       "Tag": 19,

@@ -166,6 +166,8 @@ bool Human::CheckGround(float& rDstDistance)
 	rayInfo.m_maxRange = FLT_MAX;
 	KdRayResult finalRayResult;
 
+	std::shared_ptr<GameObject> hitObj = nullptr;
+
 	for (auto& obj : Scene::GetInstance().GetObjects())
 	{
 		if (obj.get() == this) { continue; }
@@ -179,6 +181,8 @@ bool Human::CheckGround(float& rDstDistance)
 			if (rayResult.m_distance < finalRayResult.m_distance)
 			{
 				finalRayResult = rayResult;
+
+				hitObj = obj;
 			}
 		}
 	}
@@ -200,6 +204,14 @@ bool Human::CheckGround(float& rDstDistance)
 	}
 
 	rDstDistance = distanceFromGround;
+
+	if (hitObj)
+	{
+		auto mOneMove = hitObj->GetOneMove();
+		auto vOneMove = mOneMove.GetTranslation();
+
+		m_pos += vOneMove;
+	}
 
 	return m_isGround;
 }

@@ -64,6 +64,14 @@ public:
 	bool HitCheckBySphere(const SphereInfo& rInfo);
 	bool HitCheckByRay(const RayInfo& rInfo, KdRayResult& rResult);
 
+	const KdMatrix& GetPrevMatrix() { return m_mPrev; }
+
+	KdMatrix GetOneMove() {
+		KdMatrix mPI = m_mPrev;
+		mPI.Inverse();
+		return mPI * m_mWorld;
+	}
+
 protected:
 
 	virtual void Release();
@@ -76,6 +84,8 @@ protected:
 	std::shared_ptr<ModelComponent> m_spModelComponent = std::make_shared<ModelComponent>(*this);
 
 	KdMatrix	m_mWorld;
+	KdMatrix	m_mPrev;
+
 	bool		m_alive		=	true;
 	UINT		m_tag		=	OBJECT_TAG::TAG_None;
 

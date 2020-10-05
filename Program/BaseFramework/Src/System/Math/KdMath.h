@@ -58,6 +58,13 @@ public:
 		return *(Math::Vector3*)this;
 	}
 
+	//算術演算子 乗算(+)
+	KdVec3& operator+= (KdVec3 s)
+	{
+		*this = *this + s;
+		return *this;
+	}
+
 	//算術演算子 乗算(*)
 	KdVec3& operator*= (float s)
 	{

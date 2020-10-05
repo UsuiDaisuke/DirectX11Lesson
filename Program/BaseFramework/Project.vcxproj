@@ -160,6 +160,7 @@
     <ClInclude Include="Src\Application\Component\ModelComponent.h" />
     <ClInclude Include="Src\Application\Game\Action\ActionGameProcess.h" />
     <ClInclude Include="Src\Application\Game\Action\Human.h" />
+    <ClInclude Include="Src\Application\Game\Action\Lift.h" />
     <ClInclude Include="Src\Application\Game\AnimationCamera.h" />
     <ClInclude Include="Src\Application\Game\EditorCamera.h" />
     <ClInclude Include="Src\Application\Game\GameObject.h" />
@@ -206,6 +207,7 @@
     <ClCompile Include="Src\Application\Component\ModelComponent.cpp" />
     <ClCompile Include="Src\Application\Game\Action\ActionGameProcess.cpp" />
     <ClCompile Include="Src\Application\Game\Action\Human.cpp" />
+    <ClCompile Include="Src\Application\Game\Action\Lift.cpp" />
     <ClCompile Include="Src\Application\Game\AnimationCamera.cpp" />
     <ClCompile Include="Src\Application\Game\EditorCamera.cpp" />
     <ClCompile Include="Src\Application\Game\GameObject.cpp" />

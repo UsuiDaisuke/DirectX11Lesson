@@ -219,6 +219,9 @@
     <ClInclude Include="Src\Application\Game\Tank\Tank.h">
       <Filter>Src\Application\Game\Tank</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Application\Game\Action\Lift.h">
+      <Filter>Src\Application\Game\Action</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -343,6 +346,9 @@
     </ClCompile>
     <ClCompile Include="Src\Application\Game\Tank\Tank.cpp">
       <Filter>Src\Application\Game\Tank</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Game\Action\Lift.cpp">
+      <Filter>Src\Application\Game\Action</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
