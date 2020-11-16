@@ -8,14 +8,14 @@
       "ClassName": "GameObject",
       "Name": "StageMap",
       "Tag": 4,
-      "ModelFileName": "Data/StageMap/StageMap.gltf",
+      "ModelFileName": "Data/StageMap/StageMap_New.gltf",
       "Scale": [ 1, 1, 1 ]
     },
     {
       "ClassName": "Lift",
       "Name": "Lift00",
       "Tag": 4,
-      "ModelFileName": "Data/Box/Box2.gltf",
+      "ModelFileName": "Data/Box/Box3.gltf",
       "Pos": [ 0, 0, 3 ],
       "MoveTo": [ 0, 0, 13 ],
       "Speed": 0.01

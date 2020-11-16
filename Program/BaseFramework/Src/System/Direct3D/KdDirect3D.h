@@ -59,6 +59,9 @@ public:
 	// 1x1 白テクスチャ取得
 	std::shared_ptr<KdTexture>	GetWhiteTex() const { return m_texWhite; }
 
+	// 1x1 Z向き法線マップ取得
+	std::shared_ptr<KdTexture>	GetNormalTex() const { return m_texNormal; }
+
 	//==============================================================
 	//
 	// 初期化・解放
@@ -145,6 +148,9 @@ private:
 	//------------------------
 	// 1x1 白テクスチャ
 	std::shared_ptr<KdTexture>	m_texWhite;
+
+	// 1x1 Z向き法線マップ
+	std::shared_ptr<KdTexture>	m_texNormal;
 
 
 //-------------------------------

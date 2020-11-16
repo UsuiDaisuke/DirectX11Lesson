@@ -17,7 +17,6 @@ public:
 
 	//モデル取得
 	// inline const std::shared_ptr<KdModel> GetModel() const { return m_spModel; }
-	const std::vector<KdModel::Node>& GetNodes() const { return m_coppiedNodes; }
 
 	//メッシュ取得
 	inline const std::shared_ptr<KdMesh> GetMesh(UINT index) const
@@ -37,6 +36,15 @@ public:
 		}
 		return nullptr;
 	}
+
+	const std::shared_ptr<KdAnimationData> GetAnimation(const std::string& animName)const
+	{
+		if (!m_spModel) { return nullptr; }
+		return m_spModel->GetAnimation(animName);
+	}
+
+	const std::vector<KdModel::Node>& GetNodes() const { return m_coppiedNodes; }
+	std::vector<KdModel::Node>& GetChangeableNodes(){ return m_coppiedNodes; }
 
 	//モデルセット
 	void SetModel(const std::shared_ptr<KdModel> model);

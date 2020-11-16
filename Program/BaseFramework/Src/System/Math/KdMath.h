@@ -5,6 +5,15 @@ class KdVec3 : public DirectX::XMFLOAT3
 {
 public:
 
+	// XMFLOAT3から代入してきた時
+	KdVec3(const DirectX::XMFLOAT3& V)
+	{
+		x = V.x;
+		y = V.y;
+		z = V.z;
+	}
+
+
 	// 指定行列でVectorを変換する
 	KdVec3& TransformCoord(const DirectX::XMMATRIX& m)
 	{
@@ -184,6 +193,11 @@ public:
 		*this = DirectX::XMMatrixTranslation(x, y, z);
 	}
 
+	void CreateTranslation(KdVec3 v)
+	{
+		*this = DirectX::XMMatrixTranslation(v.x, v.y, v.z);
+	}
+
 	//回転行列作成
 	void CreateRotationAxis(KdVec3 vec, float angle)
 	{
@@ -212,6 +226,11 @@ public:
 	void CreateScalling(float x, float y, float z)
 	{
 		*this = DirectX::XMMatrixScaling(x, y, z);
+	}
+
+	void CreateFromQuaternion(const Math::Quaternion& quat)
+	{
+		*this = DirectX::XMMatrixRotationQuaternion(quat);
 	}
 
 	//透視影行列の作成
@@ -391,3 +410,30 @@ inline KdMatrix operator* (const KdMatrix& m1, const KdMatrix& m2)
 	using namespace DirectX;
 	return XMMatrixMultiply(m1, m2);
 }
+
+//=======================================================
+//
+//		クォータニオン
+//
+//=======================================================
+class KdQuaternion : public DirectX::XMFLOAT4
+{
+public:
+	KdQuaternion()
+	{
+		x = 0.0f;
+		y = 0.0f;
+		z = 0.0f;
+		w = 1.0f;
+	}
+
+	// XMVECTORから代入してきた時
+	KdQuaternion(const DirectX::XMVECTOR& V)
+	{
+		// 変換して代入
+		DirectX::XMStoreFloat4(this, V);
+	}
+
+	// XMVECTORへ変換
+	operator DirectX::XMVECTOR() const { return DirectX::XMLoadFloat4(this); }
+};

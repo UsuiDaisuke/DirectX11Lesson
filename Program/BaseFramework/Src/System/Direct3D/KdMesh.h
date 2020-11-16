@@ -9,6 +9,8 @@ struct KdMeshVertex
 	Math::Vector2	UV;			// UV
 	Math::Vector3	Normal;		// 法線
 	unsigned int	Color = 0xFFFFFFFF;			// RGBA色(容量削減のため、各色0～255のUINT型)
+
+	Math::Vector3		Tangent;	// 接線
 };
 
 //==========================================================
@@ -154,5 +156,6 @@ struct KdMaterial
 		BaseColorTex			= D3D.GetWhiteTex();
 		MetallicRoughnessTex	= D3D.GetWhiteTex();
 		EmissiveTex				= D3D.GetWhiteTex();
+		NormalTex				= D3D.GetNormalTex();
 	}
 };

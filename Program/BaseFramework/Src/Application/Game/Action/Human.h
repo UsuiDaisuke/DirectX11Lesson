@@ -32,7 +32,37 @@ private:
 
 	void UpdateCollision();
 	bool CheckGround(float& rDstDistance);
+	bool CheckBump();
 
 	KdVec3 m_prevPos;
 	bool m_isGround;
+
+	std::shared_ptr<KdAnimationData>	m_spAnimation = nullptr;
+	float m_animationTime = 0.0f;
+
+	class AnimationBase
+	{
+	public:
+		virtual void Update(Human& rOwner) = 0;
+	};
+
+	class ActionWait : public AnimationBase
+	{
+	public:
+		void Update(Human& rOwner) override;
+	};
+
+	class ActionWalk : public AnimationBase
+	{
+	public:
+		void Update(Human& rOwner) override;
+	};
+
+	class ActionJump : public AnimationBase
+	{
+	public:
+		void Update(Human& rOwner) override;
+	};
+
+	std::shared_ptr<AnimationBase> m_spActionState = nullptr;
 };

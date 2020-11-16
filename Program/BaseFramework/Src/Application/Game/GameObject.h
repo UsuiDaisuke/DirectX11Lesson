@@ -7,6 +7,8 @@ class ModelComponent;
 struct SphereInfo;
 struct RayInfo;
 
+struct SphereResult;
+
 //タグ定数
 enum OBJECT_TAG
 {
@@ -63,6 +65,7 @@ public:
 
 	bool HitCheckBySphere(const SphereInfo& rInfo);
 	bool HitCheckByRay(const RayInfo& rInfo, KdRayResult& rResult);
+	bool HitCheckBySphereVsMesh(const SphereInfo& rInfo, SphereResult& rResult);
 
 	const KdMatrix& GetPrevMatrix() { return m_mPrev; }
 
@@ -109,4 +112,11 @@ struct RayInfo
 	KdVec3 m_pos;
 	KdVec3 m_dir;
 	float m_maxRange = 0.0f;
+};
+
+// 球面判定の結果データ
+struct SphereResult
+{
+	KdVec3	m_push;
+	bool	m_hit = false;
 };

@@ -61,6 +61,12 @@
     <Filter Include="Src\Application\Game\Tank">
       <UniqueIdentifier>{be5dbe1f-473c-47e4-894e-2148756ef9c3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\System\Audio">
+      <UniqueIdentifier>{ce86c2be-6060-4c56-be88-42375bdb0060}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\System\Shader\ModelShader">
+      <UniqueIdentifier>{54abeffa-b08a-4e72-82cb-046ea10cda95}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Pch.h">
@@ -222,6 +228,15 @@
     <ClInclude Include="Src\Application\Game\Action\Lift.h">
       <Filter>Src\Application\Game\Action</Filter>
     </ClInclude>
+    <ClInclude Include="Src\System\Math\KdAnimation.h">
+      <Filter>Src\System\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\System\Audio\Audio.h">
+      <Filter>Src\System\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\System\Shader\ModelShader\KdModelShader.h">
+      <Filter>Src\System\Shader\ModelShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -350,6 +365,15 @@
     <ClCompile Include="Src\Application\Game\Action\Lift.cpp">
       <Filter>Src\Application\Game\Action</Filter>
     </ClCompile>
+    <ClCompile Include="Src\System\Math\KdAnimation.cpp">
+      <Filter>Src\System\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\System\Audio\Audio.cpp">
+      <Filter>Src\System\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\System\Shader\ModelShader\KdModelShader.cpp">
+      <Filter>Src\System\Shader\ModelShader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Src\System\Shader\EffectShader\inc_KdEffectShader.hlsli">
@@ -363,6 +387,9 @@
     </None>
     <None Include="Src\System\Shader\StandardShader\inc_KdStandardShader.hlsli">
       <Filter>Src\System\Shader\StandardShader</Filter>
+    </None>
+    <None Include="Src\System\Shader\ModelShader\Inc_KdModelShader.hlsli">
+      <Filter>Src\System\Shader\ModelShader</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -383,6 +410,12 @@
     </FxCompile>
     <FxCompile Include="Src\System\Shader\StandardShader\KdStandardShader_VS.hlsl">
       <Filter>Src\System\Shader\StandardShader</Filter>
+    </FxCompile>
+    <FxCompile Include="Src\System\Shader\ModelShader\KdModelShader_PS.hlsl">
+      <Filter>Src\System\Shader\ModelShader</Filter>
+    </FxCompile>
+    <FxCompile Include="Src\System\Shader\ModelShader\KdModelShader_VS.hlsl">
+      <Filter>Src\System\Shader\ModelShader</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

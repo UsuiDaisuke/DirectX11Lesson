@@ -24,6 +24,8 @@
 #include "Direct3D/KdMesh.h"
 // モデル
 #include "Direct3D/kdModel.h"
+// アニメーション
+#include "Math/KdAnimation.h"
 
 // 板ポリゴン
 #include "Direct3D/KdSquarePolygon.h"
@@ -38,6 +40,9 @@
 
 // ウィンドウ
 #include "Window/KdWindow.h"
+
+// サウンド
+#include "Audio/Audio.h"
 
 // リソース管理
 #include "Utility/KdResourceFactory.h"

@@ -1,10 +1,13 @@
 ﻿#include"CameraComponent.h"
 
 //コンストラクタ
-CameraComponent::CameraComponent(GameObject& owner) : m_owner(owner)
+CameraComponent::CameraComponent(GameObject& owner)
+	: m_owner(owner)
 {
 	m_mProj.CreateProjectionPerspectiveFov(60 * KdToRadians, 
 			D3D.GetBackBuffer()->GetAspectRatio(), 0.01f, 5000.0f);
+
+	
 }
 
 //デストラクタ

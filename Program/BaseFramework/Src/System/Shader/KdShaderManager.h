@@ -3,6 +3,7 @@
 #include "EffectShader/KdEffectShader.h"
 #include "StandardShader/KdStandardShader.h"
 #include "SpriteShader/KdSpriteShader.h"
+#include "ModelShader/KdModelShader.h"
 
 //==========================================================
 //
@@ -33,7 +34,7 @@ public:
 	KdStandardShader		m_standardShader;		// 3Dモデル描画シェーダ
 	KdEffectShader			m_effectShader;			// エフェクト描画シェーダ
 	KdSpriteShader			m_spriteShader;			// 2Dテクスチャ描画シェーダ
-
+	KdModelShader			m_modelShader;			// モデルシェーダ
 
 	//==========================
 	//

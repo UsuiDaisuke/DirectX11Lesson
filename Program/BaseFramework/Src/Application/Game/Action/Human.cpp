@@ -3,6 +3,7 @@
 #include"../Scene.h"
 #include"../../Component/CameraComponent.h"
 #include"../../Component/InputComponent.h"
+#include"../../Component/ModelComponent.h"
 
 // static const変数の初期化
 const float Human::s_allowToStepHeight = 0.8f;
@@ -24,6 +25,14 @@ void Human::Deserialize(const json11::Json& jsonObj)
 	{
 		Scene::GetInstance().SetTargetCamera(m_spCameraComponent);
 		m_spInputComponent = std::make_shared<ActionPlayerInputComponent>(*this);
+	}
+
+	m_spActionState = std::make_shared<ActionWait>();
+
+	if (m_spModelComponent)
+	{
+		// 再生するアニメーションデータを保持
+		m_spAnimation = m_spModelComponent->GetAnimation("Stand");
 	}
 }
 
@@ -59,6 +68,38 @@ void Human::Update()
 	{
 		UpdateCamera();
 	}
+
+	if (m_spAnimation && m_spModelComponent)
+	{
+		auto& rModelNode = m_spModelComponent->GetChangeableNodes();
+
+		for (auto& rAnimNode : m_spAnimation->m_nodes)
+		{
+			UINT idx = rAnimNode.m_nodeOffset;
+
+
+
+			KdMatrix rotate;
+			KdQuaternion resultQuat;
+			if (rAnimNode.InterpolateRotations(resultQuat, m_animationTime))
+			{
+				rotate.CreateFromQuaternion(resultQuat);
+			}
+
+			KdMatrix trans;
+			KdVec3 resultVec;
+			if (rAnimNode.InterpolateTranslations(resultVec, m_animationTime))
+			{
+				trans.CreateTranslation(resultVec);
+			}
+
+			rModelNode[idx].m_localTransform = rotate * trans;
+		}
+
+		m_animationTime += 1.0f;
+
+		if (m_animationTime >= m_spAnimation->m_maxLength) { m_animationTime = 0.0f; }
+	}
 }
 
 void Human::UpdateMove()
@@ -91,6 +132,11 @@ void Human::UpdateMove()
 		{
 			m_force.y = 0.2f;
 		}
+	}
+
+	if (m_spActionState)
+	{
+		m_spActionState->Update(*this);
 	}
 }
 
@@ -150,6 +196,8 @@ void Human::UpdateCollision()
 
 		m_force.y = 0.0f;
 	}
+
+	CheckBump();
 }
 
 bool Human::CheckGround(float& rDstDistance)
@@ -214,4 +262,46 @@ bool Human::CheckGround(float& rDstDistance)
 	}
 
 	return m_isGround;
+}
+
+bool Human::CheckBump()
+{
+	SphereInfo info;
+
+	info.m_pos = m_pos;		// 中心点 = キャラクターの位置
+	info.m_pos.y += 0.8f;	// ぶつかり判定のために上に持ち上げる
+	info.m_radius = 0.4f;	// キャラのサイズに合わせて半径を変える
+
+	Scene::GetInstance().AddDebugSphereLine(info.m_pos, info.m_radius);
+
+	bool isHit = false;
+	std::shared_ptr<GameObject> hitObj = nullptr;
+
+	for (auto& obj : Scene::GetInstance().GetObjects())
+	{
+		if (obj.get() == this) { continue; }
+
+		SphereResult hitResult;
+
+		if (obj->HitCheckBySphereVsMesh(info, hitResult))
+		{
+			m_pos += hitResult.m_push;
+			isHit = hitResult.m_hit;
+		}
+	}
+
+	return isHit;
+}
+
+void Human::ActionWait::Update(Human& rOwner)
+{
+	
+}
+
+void Human::ActionWalk::Update(Human& rOwner)
+{
+}
+
+void Human::ActionJump::Update(Human& rOwner)
+{
 }

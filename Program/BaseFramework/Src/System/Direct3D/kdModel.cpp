@@ -16,6 +16,18 @@ KdModel::~KdModel()
 
 }
 
+const std::shared_ptr<KdAnimationData> KdModel::GetAnimation(const std::string& animName) const
+{
+	for (auto&& anim : m_spAnimations)
+	{
+		if (anim->m_name == animName)
+		{
+			return anim;
+		}
+	}
+	return nullptr;
+}
+
 void KdModel::Release()
 {
 	m_materials.clear();
@@ -70,23 +82,64 @@ bool KdModel::Load(const std::string& filename)
 
 	for (UINT i = 0; i < m_materials.size(); i++) 
 	{
-		// src = source略
-		// dst = destinationの略
+		//src = sourceの略
+		//dst = destinationの略
 		const KdGLTFMaterial& rSrcMaterial = spGltfModel->Materials[i];
 		KdMaterial& rDstMaterial = m_materials[i];
 
-		// 名前
+		//名前
 		rDstMaterial.Name = rSrcMaterial.Name;
 
-		// 基本色
+		//基本色
 		rDstMaterial.BaseColor = rSrcMaterial.BaseColor;
-		rDstMaterial.BaseColorTex = std::make_shared<KdTexture>();
-
-		//テクスチャの読み込み
 		rDstMaterial.BaseColorTex = KdResFac.GetTexture(fileDir + rSrcMaterial.BaseColorTexture);
-		if (rDstMaterial.BaseColorTex == nullptr)
+
+		if (!rDstMaterial.BaseColorTex)
 		{
 			rDstMaterial.BaseColorTex = D3D.GetWhiteTex();
+		}
+
+		// 金属性・粗さ
+		rDstMaterial.Metallic = rSrcMaterial.Metallic;
+		rDstMaterial.Roughness = rSrcMaterial.Roughness;
+		rDstMaterial.MetallicRoughnessTex = std::make_shared<KdTexture>();
+		if (rDstMaterial.MetallicRoughnessTex->Load(fileDir + rSrcMaterial.MetallicRoughnessTexture) == false)
+		{
+			// 読み込めなかった場合は、代わりに白画像を使用
+			rDstMaterial.MetallicRoughnessTex = D3D.GetWhiteTex();
+		}
+
+		// 法線マップ
+		rDstMaterial.NormalTex = std::make_shared<KdTexture>();
+		if (rDstMaterial.NormalTex->Load(fileDir + rSrcMaterial.NormalTexture) == false)
+		{
+			// 読み込めなかった場合は、代わりにZ向き法線マップを使用
+			rDstMaterial.NormalTex = D3D.GetNormalTex();
+		}
+
+	}
+
+	// アニメーションデータ
+	m_spAnimations.resize(spGltfModel->Animations.size());
+
+	for (UINT i = 0; i < m_spAnimations.size(); ++i)
+	{
+		const KdGLTFAnimationData& rSrcAnimation = *spGltfModel->Animations[i];
+
+		m_spAnimations[i] = std::make_shared<KdAnimationData>();
+		KdAnimationData& rDstAnimation = *(m_spAnimations[i]);
+
+		rDstAnimation.m_name = rSrcAnimation.m_name;
+
+		rDstAnimation.m_maxLength = rSrcAnimation.m_maxLength;
+
+		rDstAnimation.m_nodes.resize(rSrcAnimation.m_nodes.size());
+
+		for (UINT i = 0; i < rDstAnimation.m_nodes.size(); ++i)
+		{
+			rDstAnimation.m_nodes[i].m_nodeOffset = rSrcAnimation.m_nodes[i]->m_nodeOffset;
+			rDstAnimation.m_nodes[i].m_translations = rSrcAnimation.m_nodes[i]->m_translations;
+			rDstAnimation.m_nodes[i].m_rotations = rSrcAnimation.m_nodes[i]->m_rotations;
 		}
 	}
 

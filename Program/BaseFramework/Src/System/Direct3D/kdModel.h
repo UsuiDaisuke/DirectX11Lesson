@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+struct KdAnimationData;
+
 class KdModel
 {
 public:
@@ -34,6 +36,8 @@ public:
 
 	const std::vector<Node>& GetOriginalNodes() const { return m_originalNodes; }
 
+	const std::shared_ptr<KdAnimationData> GetAnimation(const std::string& animName) const;
+
 private:
 
 	void Release();							// 解放
@@ -42,4 +46,6 @@ private:
 	//マテリアル配列
 	std::vector<KdMaterial> m_materials;
 
+	// アニメーションデータリスト
+	std::vector<std::shared_ptr<KdAnimationData>>	m_spAnimations;
 };

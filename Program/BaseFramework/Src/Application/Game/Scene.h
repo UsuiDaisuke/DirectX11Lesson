@@ -46,6 +46,13 @@ public:
 	inline void SetTargetCamera(std::shared_ptr<CameraComponent> spCamera) { m_wpTargetCamera = spCamera; }
 
 private:
+
+	std::unique_ptr<DirectX::AudioEngine>			m_audioEng = nullptr;
+	bool m_canPlaySE;
+
+	std::vector<std::unique_ptr<DirectX::SoundEffect>>	m_soundEffects;
+	std::list<std::unique_ptr<DirectX::SoundEffectInstance>> m_instances;
+
 	Scene();
 
 	void LoadScene(const std::string& sceneFilename);
@@ -74,6 +81,13 @@ private:
 
 	// デバッグライン描画用の頂点配列
 	std::vector<KdEffectShader::Vertex> m_debugLines;
+
+	//-------------------------
+	// 平行光
+	//-------------------------
+	KdVec3 m_lightDir = { 0,-1,0 };		//方向
+	KdVec3 m_lightColor = { 1,1,1 };		//光の色
+
 
 	enum pauseState
 	{

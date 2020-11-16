@@ -206,6 +206,37 @@ bool GameObject::HitCheckByRay(const RayInfo& rInfo, KdRayResult& rResult)
 	return rResult.m_hit;
 }
 
+bool GameObject::HitCheckBySphereVsMesh(const SphereInfo& rInfo, SphereResult& rResult)
+{
+	// モデルコンポーネントがない場合は判定しない
+	if (!m_spModelComponent) { return false; }
+
+	// 全てのノードのメッシュから押し返された位置を格納する
+	KdVec3 pushedFromNodesPos = rInfo.m_pos;
+
+	// 全てのノードと判定
+	for (auto& node : m_spModelComponent->GetNodes())
+	{
+		// このノードがモデルを持っていなかった場合無視
+		if (!node.m_spMesh) { continue; }
+
+		// 点とノードの判定
+		if (KdSphereToMesh(pushedFromNodesPos, rInfo.m_radius, *node.m_spMesh, node.m_localTransform * m_mWorld, pushedFromNodesPos))
+		{
+			rResult.m_hit = true;
+		}
+	}
+
+	// 当たっていたら
+	if (rResult.m_hit)
+	{
+		// 押し戻された球の位置と前の位置から、押し戻すベクトルを計算する
+		rResult.m_push = pushedFromNodesPos - rInfo.m_pos;
+	}
+
+	return rResult.m_hit;
+}
+
 void GameObject::Release()
 {
 

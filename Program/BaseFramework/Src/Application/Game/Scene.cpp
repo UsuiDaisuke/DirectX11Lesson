@@ -88,6 +88,50 @@ void Scene::Init()
 
 	m_EditorLog = std::make_shared<ImGuiLogWindow>();
 
+	// サウンド関連の処理
+	DirectX::AUDIO_ENGINE_FLAGS eflags = DirectX::AudioEngine_EnvironmentalReverb | DirectX::AudioEngine_ReverbUseFilters;
+
+	// サウンドエンジンの作成
+	m_audioEng = std::make_unique<DirectX::AudioEngine>(eflags);
+	m_audioEng->SetReverb(DirectX::Reverb_Default);
+
+	// サウンドの読み込み
+	if (m_audioEng != nullptr)
+	{
+		try
+		{
+			// wstringに変換(const char* は受け取ってくれない)
+			std::wstring wFilename = sjis_to_wide("Data/Audio/BGM/Castle.wav");
+
+			// BGMの読み込み
+			m_soundEffects.push_back(std::make_unique<DirectX::SoundEffect>(m_audioEng.get(), wFilename.c_str()));
+			
+			// SEの読み込み
+			wFilename = sjis_to_wide("Data/Audio/SE/ItemGet.wav");
+			m_soundEffects.push_back(std::make_unique<DirectX::SoundEffect>(m_audioEng.get(), wFilename.c_str()));
+		}
+		catch (...)
+		{
+			assert(0 && "Sound File Load Error");
+		}
+	}
+
+	// BGMサウンドの再生
+	if (m_soundEffects[0] != nullptr)
+	{
+		// 再生オプション
+		DirectX::SOUND_EFFECT_INSTANCE_FLAGS flags = DirectX::SoundEffectInstance_Default;
+
+		// サウンドエフェクトからサウンドインスタンスの作成
+		auto instance = (m_soundEffects[0]->CreateInstance(flags));
+		// サウンドインスタンスを使って再生
+		if (instance)
+		{
+			//instance->Play();
+		}
+		m_instances.push_back(std::move(instance));
+	}
+
 	Deserialize();
 }
 
@@ -115,6 +159,14 @@ void Scene::Release()
 	}
 
 	m_spObjects.clear();
+
+	// サウンドの後処理
+	m_audioEng = nullptr;
+
+	for (auto& ins : m_instances)
+	{
+		ins = nullptr;
+	}
 }
 
 void Scene::Update()
@@ -125,6 +177,20 @@ void Scene::Update()
 			m_spCamera->Update();
 		}
 	}
+
+	{
+		//疑似的な太陽の表示
+		const KdVec3 sunPos = { 0.f,5.f,0.f };
+		KdVec3 sunDir = m_lightDir;
+		sunDir.Normalize();
+		KdVec3 color = m_lightColor;
+		color.Normalize();
+		Math::Color sunColor = color;
+		sunColor.w = 1.0f;
+		AddDebugLines(sunPos, sunPos + sunDir * 2, sunColor);
+		AddDebugSphereLine(sunPos, 0.5f, sunColor);
+	}
+
 
 	if (pauseFlag < PAUSE_ON_DOWN)
 	{
@@ -154,6 +220,52 @@ void Scene::Update()
 		{
 			ExecChangeScene();
 		}
+	}
+
+	if (GetAsyncKeyState('P'))
+	{
+		// SEならせるかどうか
+		if (m_canPlaySE)
+		{
+			// サウンドエフェクトからサウンドインスタンスを作成
+			DirectX::SOUND_EFFECT_INSTANCE_FLAGS flags = DirectX::SoundEffectInstance_Default;
+
+			// 再生
+			auto instance = (m_soundEffects[1]->CreateInstance(flags));
+
+			if (instance)
+			{
+				instance->Play();
+			}
+
+			// 再生中インスタンスリストに加える
+			m_instances.push_back(std::move(instance));
+
+			m_canPlaySE = false;
+		}
+	}
+	else
+	{
+		m_canPlaySE = true;
+	}
+
+	// サウンドエンジンの更新
+	if (m_audioEng == nullptr)
+	{
+		m_audioEng->Update();
+	}
+
+	// 再生中ではないインスタンスは終了したとしてリストから削除
+	for (auto iter = m_instances.begin(); iter != m_instances.end();)
+	{
+		if (iter->get()->GetState() != DirectX::SoundState::PLAYING)
+		{
+			// リストから削除
+			iter = m_instances.erase(iter);
+			continue;
+		}
+
+		++iter;
 	}
 }
 
@@ -192,7 +304,8 @@ void Scene::Draw()
 	}
 
 	//不透明物描画
-	SHADER.m_standardShader.SetToDevice();
+	//SHADER.m_standardShader.SetToDevice();
+	SHADER.m_modelShader.SetToDevice();
 
 	for (auto pObjects : m_spObjects)
 	{
@@ -281,6 +394,8 @@ void Scene::LoadScene(const std::string& sceneFilename)
 		//リストへ追加
 		AddObject(newGameObj);
 	}
+
+	m_spSky = KdResourceFactory::GetInstance().GetModel("Data/Sky/Sky.gltf");
 }
 
 void Scene::AddObject(std::shared_ptr<GameObject> pObject)
@@ -393,6 +508,22 @@ void Scene::ImGuiUpdate()
 	ImGui::End();
 
 	m_EditorLog->ImGuiUpdate("Log Window");
+
+	if (ImGui::Begin("LightSettings"))
+	{
+
+		if (ImGui::DragFloat3("Direction", &m_lightDir.x, 0.01f))
+		{
+			SHADER.m_cb8_Light.Work().DL_Dir = m_lightDir;
+			SHADER.m_cb8_Light.Work().DL_Dir.Normalize();
+		}
+		if (ImGui::DragFloat3("Color", &m_lightColor.x, 0.01f))
+		{
+			SHADER.m_cb8_Light.Work().DL_Color = m_lightColor;
+		}
+	}
+	ImGui::End();
+
 }
 
 void Scene::AddDebugLines(const Math::Vector3& p1, const Math::Vector3& p2, const Math::Color& color)

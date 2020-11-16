@@ -82,6 +82,24 @@ struct KdGLTFNode
 
 };
 
+struct KdGLTFAnimationData
+{
+	std::string		m_name;
+
+	float			m_maxLength = 0;
+
+	struct Node
+	{
+		int			m_nodeOffset = -1;
+
+		std::vector<KdAnimKeyQuaternion>	m_rotations;
+		std::vector<KdAnimKeyVector3>		m_scales;
+		std::vector<KdAnimKeyVector3>		m_translations;
+	};
+
+	std::vector<std::shared_ptr<Node>>	m_nodes;
+};
+
 //============================
 // モデルデータ
 //============================
@@ -97,7 +115,7 @@ struct KdGLTFModel
 	std::vector<KdGLTFMaterial>					Materials;
 
 	// アニメーションデータリスト
-//	std::vector<std::shared_ptr<KdAnimationData>>		Animations;
+	std::vector<std::shared_ptr<KdGLTFAnimationData>>		Animations;
 
 };
 
